@@ -1,0 +1,26 @@
+{
+  "name": "Creaciones JJ – Prioridad Producción",
+  "short_name": "Creaciones JJ",
+  "description": "Sistema de gestión de producción para Creaciones JJ – Ochoa & Risquez",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "scope": "./",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "any",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "./logo_creaciones_jj.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./logo_creaciones_jj.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
