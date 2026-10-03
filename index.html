@@ -1,402 +1,1287 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <script>
-    window.__ERRORS__ = [];
-    window.onerror = function(msg, url, line, col, error) {
-      // Filtrar errores de extensiones del navegador
-      if (url && (url.includes('chrome-extension://') || url.includes('extension:') || url.includes('github.io'))) {
-        return;
-      }
-      window.__ERRORS__.push({ msg: msg, line: line, col: col, url: url, stack: error ? error.stack : '' });
-      // Solo cambiar el título si es un error real de la aplicación
-      if (!url || !url.includes('github.io')) {
-        document.title = "JSERROR: " + line + ": " + msg;
-      }
-    };
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Creaciones JJ — Catálogo Digital, Pedidos & Bio-Link Oficial</title>
+  
+  <meta name="description" content="Taller de Papelería Creativa, Toppers 3D, Cajas Temáticas y Birretes en San Francisco, Zulia. Tu imaginación, nuestra creación." />
+  <meta property="og:title" content="Creaciones JJ — Tu imaginación, nuestra creación" />
+  <meta property="og:description" content="Catálogo digital y pedidos rápidos con registro automático en taller y WhatsApp." />
+  <meta property="og:image" content="./LOGO JJ_Mesa de trabajo 1.png" />
+  <meta name="theme-color" content="#006a46" />
 
-<meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <meta name="theme-color" content="#1a1a2e"/>
-  <meta name="description" content="Sistema de gestión de producción para Creaciones JJ – Ochoa & Risquez."/>
-  <link rel="manifest" href="./manifest.webmanifest?v=76"/>
-  <link rel="icon" type="image/png" href="./logo_creaciones_jj.png"/>
-  <link rel="apple-touch-icon" href="./logo_creaciones_jj.png"/>
-    <!-- FontAwesome 6, SweetAlert2 v11 e Inter Font (Creaciones JJ) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link rel="stylesheet" href="./styles.css?v=80"/>
-  <title>Creaciones JJ – Prioridad Producción</title>
-  <!-- CSS crítico: oculta workspace ANTES de que corra cualquier JS -->
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/png" href="./LOGO JJ_Mesa de trabajo 1.png" />
+  <link rel="apple-touch-icon" href="./LOGO JJ_Mesa de trabajo 1.png" />
+
+  <!-- Tipografías Google Fonts (Epilogue + Be Vietnam Pro + JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
   <style>
-    #workspace { display: none; }
-    #login-view { display: flex; }
+    /* VARIABLES Y DESIGN TOKENS */
+    :root {
+      --primary: #006a46;
+      --primary-container: #008559;
+      --primary-fixed: #53feb6;
+      --primary-fixed-dim: #26e19b;
+      --on-primary: #ffffff;
+      
+      --secondary: #a500b3;
+      --secondary-container: #f562fe;
+      --secondary-fixed: #ffd6fa;
+      --on-secondary: #ffffff;
+      
+      --tertiary: #006b26;
+      --bg: #fdf9f6;
+      --surface: #ffffff;
+      --surface-container-low: #f7f3f0;
+      --surface-container: #f1edea;
+      --surface-container-high: #ebe7e4;
+      
+      --on-surface: #1c1b1a;
+      --on-surface-variant: #5b3f43;
+      --outline: #8f6f73;
+      --outline-variant: #e4bdc2;
+      
+      --shadow-soft: 0 12px 30px -5px rgba(0, 106, 70, 0.08);
+      --shadow-hover: 0 20px 40px -10px rgba(0, 106, 70, 0.16);
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.05);
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+      
+      --font-display: 'Epilogue', sans-serif;
+      --font-body: 'Be Vietnam Pro', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(0, 106, 70, 0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    /* MODO EDICION BARRA FLOTANTE */
+    .editor-control-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(28, 27, 26, 0.95);
+      backdrop-filter: blur(12px);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
+      z-index: 10000;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.3s ease;
+    }
+    .editor-toggle-btn {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .editor-toggle-btn.active { background: #ff5722; }
+    .editor-save-btn {
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .editor-save-btn:hover { background: rgba(255,255,255,0.25); }
+    .editor-mode-active [data-editable="true"] {
+      outline: 2px dashed #008559 !important;
+      outline-offset: 4px;
+      cursor: text;
+      background: rgba(83, 254, 182, 0.08) !important;
+      border-radius: 4px;
+    }
+
+    /* TOP ANNOUNCEMENT */
+    .top-strip {
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.82rem;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-weight: 500;
+    }
+    .top-strip-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bcv-rate-pill {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* BIO-LINK WRAPPER */
+    .bio-hub-wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    .bio-profile-header {
+      text-align: center;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .bio-avatar-ring {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      box-shadow: 0 8px 25px rgba(0, 106, 70, 0.2);
+      margin-bottom: 16px;
+      animation: pulseAvatar 4s ease infinite;
+    }
+    @keyframes pulseAvatar {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .bio-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #ffffff;
+      object-fit: contain;
+      border: 3px solid #ffffff;
+    }
+    .bio-brand-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bio-verified-icon {
+      color: var(--primary-container);
+      font-size: 1.1rem;
+    }
+    .bio-slogan {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--on-surface-variant);
+      margin-top: 2px;
+      margin-bottom: 12px;
+    }
+    .bio-tags-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .bio-tag {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--outline-variant);
+    }
+    .bio-tag.accent {
+      background: var(--primary-fixed);
+      color: var(--primary);
+      border-color: var(--primary-fixed-dim);
+    }
+
+    /* Social Icon Bar */
+    .bio-social-bar {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .bio-social-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--outline-variant);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bio-social-icon:hover {
+      transform: translateY(-4px) scale(1.08);
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 8px 18px rgba(0,106,70,0.25);
+    }
+    .bio-social-icon.wa:hover { background: #25D366; border-color: #25D366; }
+    .bio-social-icon.ig:hover {
+      background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+      border-color: transparent;
+    }
+    .bio-social-icon.fb:hover { background: #1877F2; border-color: #1877F2; }
+
+    /* ACTION BUTTONS (LINKTREE KILLER) */
+    .bio-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .bio-link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1.5px solid var(--outline-variant);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--on-surface);
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bio-link-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+    .bio-link-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .bio-link-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background: var(--surface-container-low);
+      color: var(--primary);
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+    .bio-link-btn:hover .bio-link-icon-box { transform: scale(1.1); }
+    .bio-link-texts h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      line-height: 1.2;
+    }
+    .bio-link-texts p {
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+      margin-top: 2px;
+    }
+    .bio-link-arrow {
+      color: var(--outline);
+      font-size: 1rem;
+      transition: transform 0.2s ease;
+    }
+    .bio-link-btn:hover .bio-link-arrow {
+      transform: translateX(4px);
+      color: var(--primary);
+    }
+
+    .bio-link-btn.featured-wa {
+      background: linear-gradient(135deg, #075E54 0%, #128C7E 100%);
+      color: #ffffff;
+      border-color: #075E54;
+    }
+    .bio-link-btn.featured-wa .bio-link-texts h3 { color: #ffffff; }
+    .bio-link-btn.featured-wa .bio-link-texts p { color: rgba(255,255,255,0.85); }
+    .bio-link-btn.featured-wa .bio-link-icon-box { background: rgba(255,255,255,0.2); color: #ffffff; }
+    .bio-link-btn.featured-wa .bio-link-arrow { color: #ffffff; }
+
+    .bio-link-btn.featured-catalog {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .bio-link-btn.featured-catalog .bio-link-texts h3 { color: #ffffff; }
+    .bio-link-btn.featured-catalog .bio-link-texts p { color: rgba(255,255,255,0.85); }
+    .bio-link-btn.featured-catalog .bio-link-icon-box { background: rgba(255,255,255,0.2); color: #ffffff; }
+    .bio-link-btn.featured-catalog .bio-link-arrow { color: #ffffff; }
+
+    /* CATALOG SECTION */
+    .catalog-section-container { margin-top: 50px; }
+    .section-header-title { text-align: center; margin-bottom: 24px; }
+    .section-header-title h2 {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+    .section-header-title p {
+      font-size: 0.95rem;
+      color: var(--on-surface-variant);
+      margin-top: 4px;
+    }
+
+    /* Category Filter Tabs */
+    .catalog-filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cat-filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .cat-filter-btn:hover { background: var(--surface-container-low); color: var(--primary); }
+    .cat-filter-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(0, 106, 70, 0.2);
+    }
+
+    /* Products Grid */
+    .products-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+    .prod-card {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--outline-variant);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .prod-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+    }
+    .prod-img-box {
+      height: 220px;
+      background: var(--surface-container);
+      position: relative;
+      overflow: hidden;
+    }
+    .prod-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .prod-card:hover .prod-img-box img { transform: scale(1.06); }
+    .prod-cat-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 106, 70, 0.88);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .prod-cat-badge.secondary { background: rgba(165, 0, 179, 0.88); }
+    .prod-cat-badge.dark { background: rgba(28, 27, 26, 0.88); }
+
+    .prod-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .prod-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      line-height: 1.3;
+    }
+    .prod-desc {
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+      line-height: 1.45;
+    }
+    .prod-price-strip {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 10px;
+      border-top: 1px dashed var(--outline-variant);
+    }
+    .price-usd {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .price-bs {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--on-surface-variant);
+    }
+    .btn-order-wa-prod {
+      background: #25D366;
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-order-wa-prod:hover {
+      background: #1eb855;
+      transform: translateY(-1px);
+    }
+
+    /* COTIZADOR CON REGISTRO A JULIETA */
+    .customizer-box {
+      background: var(--surface);
+      border: 1px solid var(--outline-variant);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+    .customizer-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    .customizer-badge-info {
+      background: #e8f5e9;
+      color: var(--primary);
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.84rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      border: 1px solid var(--primary-fixed);
+    }
+    .form-grid-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-group-field label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--on-surface);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .form-group-field input, 
+    .form-group-field select, 
+    .form-group-field textarea {
+      background: var(--surface-container-low);
+      border: 1.5px solid var(--surface-container-high);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--on-surface);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .form-group-field input:focus, 
+    .form-group-field select:focus, 
+    .form-group-field textarea:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 106, 70, 0.1);
+    }
+    .btn-submit-order-wa {
+      width: 100%;
+      background: linear-gradient(135deg, #075E54 0%, #25D366 100%);
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
+      transition: all 0.25s ease;
+    }
+    .btn-submit-order-wa:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(37, 211, 102, 0.35);
+    }
+    .order-status-alert {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .order-status-alert.success {
+      display: block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    /* TALLER INFO & FAITH */
+    .workshop-faith-banner {
+      background: var(--surface-container-low);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      border: 1px dashed var(--outline-variant);
+      margin-bottom: 40px;
+    }
+    .faith-verse {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+    .faith-desc {
+      font-size: 0.85rem;
+      color: var(--on-surface-variant);
+    }
+
+    .shipping-strip {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--on-surface-variant);
+    }
+    .shipping-badge-pill {
+      background: var(--surface);
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--outline-variant);
+    }
+
+    .footer-bio {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--surface-container-high);
+      font-size: 0.82rem;
+      color: var(--on-surface-variant);
+    }
+
+    .wa-floating-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25D366;
+      color: #ffffff;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      text-decoration: none;
+      box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+      z-index: 9999;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .wa-floating-btn:hover {
+      transform: scale(1.1) rotate(6deg);
+    }
+
+    @media (max-width: 600px) {
+      .form-grid-row { grid-template-columns: 1fr; }
+      .products-cards-grid { grid-template-columns: 1fr; }
+      .editor-control-bar { width: 92%; justify-content: space-between; }
+    }
   </style>
 </head>
 <body>
-  <div class="app-shell">
 
-    <!-- ========== PANTALLA DE LOGIN ========== -->
-    <section id="login-view" class="unlock-screen">
-
-      <!-- Fondo decorativo con gradiente de la marca -->
-      <div class="login-bg-decor" aria-hidden="true">
-        <div class="login-bg-circle login-bg-circle--1"></div>
-        <div class="login-bg-circle login-bg-circle--2"></div>
-      </div>
-
-      <!-- Logo de la empresa -->
-      <div class="login-logo-wrapper">
-        <img
-          src="./logo_creaciones_jj.png"
-          alt="Creaciones JJ"
-          class="login-logo"
-          onerror="this.src='./icons/icon-192.png'"
-        />
-      </div>
-
-      <!-- Nombre de la empresa -->
-      <div class="login-brand">
-        <p class="login-brand-sub">Sistema de Producción</p>
-        <h1 class="login-brand-name">Creaciones JJ</h1>
-        <p class="login-brand-tag">Ochoa &amp; Risquez</p>
-      </div>
-
-      <!-- Formulario de inicio de sesión -->
-      <form id="login-form" class="unlock-form">
-        <label for="login-name">Tu nombre</label>
-        <input
-          id="login-name"
-          autocomplete="off"
-          placeholder="Ej. Valentina"
-          required
-        />
-        <label for="login-pin">Tu PIN personal</label>
-        <input
-          id="login-pin"
-          type="password"
-          inputmode="numeric"
-          autocomplete="off"
-          placeholder="Seis dígitos"
-          required
-        />
-        <button type="submit" id="login-btn-manual" class="primary-button login-submit-btn">
-          Iniciar sesión
-        </button>
-        <button type="button" class="secondary-button" onclick="window.clearAllCache()" style="margin-top:8px; width:100%; font-size:11px; padding:6px; background:#64748b; color:white; border:none;">
-          🗑️ Limpiar caché y datos guardados
-        </button>
-        <button type="button" class="secondary-button pwa-install-btn" onclick="if (window.triggerPwaInstall) window.triggerPwaInstall();" style="margin-top:10px; width:100%; border:1px solid #3b82f6; background:rgba(59,130,246,0.12); color:#60a5fa; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px;">
-          💻 Instalar App en esta Computadora
-        </button>
-        <p id="login-error" class="form-error"></p>
-      </form>
-
-      <p class="login-footer-copy">
-        © Creaciones JJ – Ochoa &amp; Risquez · Gestión de Producción
-      </p>
-    </section>
-
-    <!-- ========== ÁREA DE TRABAJO ========== -->
-    <section id="workspace" class="workspace">
-      <!-- HEADER FLOTANTE STICKY (ESTILO SICS 2026) -->
-      <header class="jj-main-header">
-        <a class="jj-header-brand" onclick="navigate('modules')">
-          <img src="./logo_creaciones_jj.png" class="jj-brand-logo-img" alt="Creaciones JJ">
-          <div>
-            <div class="jj-brand-title">Creaciones JJ</div>
-            <div class="jj-brand-sub">Ochoa &amp; Risquez · Taller</div>
-          </div>
-        </a>
-
-        <div class="jj-header-controls">
-          <!-- Botón Pedido Rápido Mostrador -->
-          <button type="button" id="btn-fast-order" class="control-btn-circle" onclick="openExpressOrderModal()" title="Mostrador Rápido" style="background:#f59e0b; color:white; border:none; padding:8px; border-radius:50%; font-weight:800; font-size:14px; display:inline-flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; box-shadow:0 3px 10px rgba(245,158,11,0.35); width:36px; height:36px;">
-            <i class="fas fa-bolt"></i>
-          </button>
-
-          <!-- Campanita de Alertas y Monitoreo Remoto -->
-          <div class="bell-container" id="bellContainer">
-            <button type="button" class="control-btn-circle" id="bellIconBtn" title="Alertas de Taller y Sincronización">
-              <i class="fas fa-bell bell-icon" id="bellIcon"></i>
-              <span class="bell-badge" id="bellBadge">0</span>
-            </button>
-            <div class="dropdown-notif" id="notifDropdown">
-              <div class="dropdown-notif-header">
-                <span><i class="fas fa-exclamation-circle"></i> Alertas y Monitoreo</span>
-                <span id="notif-count-text" style="font-weight:700; font-size:11px;">0 activas</span>
-              </div>
-              <div class="notif-list" id="notifList">
-                <div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">
-                  <i class="fas fa-check-circle" style="color:#10b981; font-size:2rem; margin-bottom:8px;"></i><br/>
-                  Todo al día. No hay alertas críticas en el taller.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Buscador Inteligente Spotlight (Ctrl + K) -->
-          <button type="button" id="searchToggleBtn" class="control-btn-circle" title="Buscador Spotlight (Ctrl + K)">
-            <i class="fas fa-search"></i>
-          </button>
-
-          <!-- Botón Modo Oscuro / Claro -->
-          <button type="button" id="themeToggleBtn" class="control-btn-circle" onclick="toggleTheme()" title="Cambiar Tema (Oscuro / Claro)">
-            <i class="fas fa-moon" id="themeIcon"></i>
-          </button>
-
-          <!-- Chip Precios y Medidas de Taller -->
-          <button type="button" class="control-btn-circle" onclick="openWorkshopPricesModal()" title="Precios y Medidas del Taller" style="color:#10b981;">
-            <i class="fas fa-tags"></i>
-          </button>
-
-          <!-- Botón Guía -->
-          <button type="button" class="control-btn-circle" onclick="openLearningGuideModal()" title="Guía y Manual de Enseñanza">
-            <i class="fas fa-graduation-cap" style="color:#3b82f6;"></i>
-          </button>
-
-          <!-- Botón Refrescar -->
-          <button type="button" id="refresh" class="control-btn-circle" title="Actualizar datos">
-            <i class="fas fa-sync-alt"></i>
-          </button>
-
-          <!-- Perfil Usuario -->
-          <!-- Perfil Usuario y Autogestión de PIN -->
-          <button type="button" class="user-pill" id="userPillBtn" title="Perfil activo (Clic para cambiar tu PIN)" onclick="if (window.openChangePinModal) window.openChangePinModal();">
-            <i class="fas fa-user"></i>
-            <span id="userPillName">Usuario</span>
-          </button>
-          <button type="button" class="btn-change-pin-header" onclick="if (window.openChangePinModal) window.openChangePinModal();" title="Cambiar mi PIN o contraseña personal">
-            <i class="fas fa-key"></i>
-          </button>
-
-          <!-- Botón Salir -->
-          <button type="button" class="logout-btn-new" onclick="doLogout()" title="Cerrar sesión" style="margin-left: 8px;">
-            <i class="fas fa-power-off"></i>
-          </button>
-        </div>
-            </header>
-
-      <!-- Fichas y Módulos de Navegación Interactiva Creaciones JJ -->
-      <nav id="sics-module-tabs" class="sics-module-tabs-bar">
-        <button type="button" class="sics-tab-btn active" data-screen="modules" onclick="navigate('modules')">
-          <i class="fas fa-th-large"></i> <span>Módulos</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="now" onclick="navigate('now')">
-          <i class="fas fa-bolt"></i> <span>Mesa Activa</span> <span class="tab-badge" id="tabBadgeNow">0</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="team" onclick="navigate('team')">
-          <i class="fas fa-inbox"></i> <span>Bandeja Global</span> <span class="tab-badge" id="tabBadgeTeam">0</span>
-        </button>
-        <button type="button" class="sics-tab-btn manager-only-tab" data-screen="reports" onclick="navigate('reports')">
-          <i class="fas fa-chart-line"></i> <span>Reportes &amp; Avance</span>
-        </button>
-        <button type="button" class="sics-tab-btn manager-only-tab" data-screen="finances" onclick="navigate('finances')" id="tabBtnFinances">
-          <i class="fas fa-dollar-sign"></i> <span>Finanzas</span>
-        </button>
-        <button type="button" class="sics-tab-btn manager-only-tab" data-screen="providers" onclick="navigate('providers')" id="tabBtnProviders">
-          <i class="fas fa-truck-loading"></i> <span>Proveedores</span> <span class="tab-badge" id="tabBadgeProviders" style="display:none;">0</span>
-        </button>
-        <button type="button" class="sics-tab-btn manager-only-tab" data-screen="cash" onclick="navigate('cash')" id="tabBtnCash">
-          <i class="fas fa-cash-register"></i> <span>Cierre Caja</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="inventory" onclick="navigate('inventory')" id="tabBtnInventory">
-          <i class="fas fa-boxes"></i> <span>Inventario</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="workshopPrices" onclick="navigate('workshopPrices')" id="tabBtnWorkshopPrices">
-          <i class="fas fa-tags" style="color:#10b981;"></i> <span>Precios &amp; Medidas</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="schedules" onclick="navigate('schedules')">
-          <i class="fas fa-calendar-alt"></i> <span>Horarios</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="history" onclick="navigate('history')">
-          <i class="fas fa-check-double"></i> <span>Historial</span>
-        </button>
-        <button type="button" class="sics-tab-btn" data-screen="settings" onclick="navigate('settings')">
-          <i class="fas fa-cog"></i> <span>Ajustes</span>
-        </button>
-      </nav>
-
-      <main id="screen" class="screen" aria-live="polite"></main>
-
-      <nav id="app-nav" class="bottom-nav">
-        <button data-screen="now"       class="nav-button active"><span>⌁</span>Ahora</button>
-        <button data-screen="queue"     class="nav-button"><span>☷</span>Mi Bandeja</button>
-        <button data-screen="team"      class="nav-button"><span>⚠</span>Equipo</button>
-        <button data-screen="history"   class="nav-button"><span>▣</span>Historial</button>
-        <button data-screen="schedules" class="nav-button"><span>📅</span>Horarios</button>
-        <button data-screen="finances"  class="nav-button nav-lead-only" style="display:none;"><span>💵</span>Finanzas</button>
-        <button data-screen="settings"  class="nav-button"><span>⚙</span>Ajustes</button>
-      </nav>
-    </section>
+  <!-- Floating Editor Bar for Management Presentation -->
+  <div class="editor-control-bar">
+    <button class="editor-toggle-btn" id="btn-toggle-editor" onclick="toggleEditMode()">
+      <i class="fa-solid fa-pencil"></i> <span id="editor-btn-text">Modo Edición: OFF</span>
+    </button>
+    <button class="editor-save-btn" onclick="saveEditsToStorage()">
+      <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+    </button>
+    <button class="editor-save-btn" onclick="resetEditsFromStorage()" style="color:#ffcdd2;">
+      <i class="fa-solid fa-arrow-rotate-left"></i> Restablecer
+    </button>
   </div>
 
-  
-  <!-- Datalist Autocompletado de Trabajos Creaciones JJ -->
-  <datalist id="subitem-tipos-list">
-    <option value="Topper 3D">
-    <option value="Topper Sencillo">
-    <option value="Stickers / Calcomanías">
-    <option value="Taza Sublimada">
-    <option value="Invitación Digital">
-    <option value="Invitación Física / Tarjetas">
-    <option value="Letras 3D">
-    <option value="Maqueta Escolar">
-    <option value="Caja Sorpresa / Cotillón">
-    <option value="Banderines / Guirnaldas">
-    <option value="Cuadro Personalizado">
-    <option value="Estampado / Franela">
-    <option value="Chapa / Pin">
-    <option value="Corte Vinil">
-  </datalist>
+  <!-- Top Strip -->
+  <div class="top-strip">
+    <div class="top-strip-inner">
+      <span>✂️ Taller Creativo en San Francisco, Zulia • Envíos a toda Venezuela</span>
+      <div class="bcv-rate-pill">
+        <i class="fa-solid fa-coins"></i> Tasa BCV: <strong id="bcv-val-display" data-editable="true">Consultar al ordenar</strong>
+      </div>
+    </div>
+  </div>
 
-  <dialog id="modal" class="modal"></dialog>
-  <div id="toast" class="toast" role="status"></div>
+  <!-- Bio-Link Hub Wrapper -->
+  <div class="bio-hub-wrapper">
 
-  <script src="./firebase-config.js"></script>
-  <script src="./app-registrar-fix.js?v=85"></script>
+    <!-- Profile Header (Linktree Killer) -->
+    <header class="bio-profile-header">
+      <div class="bio-avatar-ring">
+        <img src="./LOGO JJ_Mesa de trabajo 1.png" alt="Creaciones JJ Logo" class="bio-avatar-img" />
+      </div>
+      <h1 class="bio-brand-title" data-editable="true" id="txt-landing-brand">
+        Creaciones JJ
+        <i class="fa-solid fa-circle-check bio-verified-icon"></i>
+      </h1>
+      <p class="bio-slogan" data-editable="true" id="txt-landing-slogan">Tu imaginación, nuestra creación</p>
+      
+      <div class="bio-tags-row">
+        <span class="bio-tag accent">🎂 Toppers 15 Años & Bodas</span>
+        <span class="bio-tag accent">🎁 Cajas Sorpresa & Viajes</span>
+        <span class="bio-tag">🎓 Birretes de Grado</span>
+        <span class="bio-tag">🇻🇪 Envíos Nacionales</span>
+      </div>
 
+      <div class="bio-social-bar">
+        <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ,%20vengo%20desde%20su%20enlace%20web" target="_blank" class="bio-social-icon wa" title="WhatsApp Directo">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="https://instagram.com/creacionesjj10" target="_blank" class="bio-social-icon ig" title="Instagram @creacionesjj10">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://facebook.com/jorge.ochoagomez.94" target="_blank" class="bio-social-icon fb" title="Facebook Creaciones JJ">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+        <a href="mailto:creacionesjj10@gmail.com" class="bio-social-icon" title="Correo Electrónico">
+          <i class="fa-regular fa-envelope"></i>
+        </a>
+        <a href="./dashboard-redes-sociales.html" target="_blank" class="bio-social-icon" title="Dashboard Redes Sociales">
+          <i class="fa-solid fa-chart-pie"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Fast Action Buttons (Linktree Killer) -->
+    <div class="bio-links-list">
+      <!-- WhatsApp Directo -->
+      <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20%F0%9F%91%8B%20Deseo%20hacer%20una%20consulta%20directa" target="_blank" class="bio-link-btn featured-wa">
+        <div class="bio-link-left">
+          <div class="bio-link-icon-box">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <div class="bio-link-texts">
+            <h3 data-editable="true" id="btn-txt-wa">Atención Inmediata por WhatsApp</h3>
+            <p data-editable="true" id="btn-txt-wa-sub">0414-164-6511 • Moisés y equipo responden al instante</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-right bio-link-arrow"></i>
+      </a>
+
+      <!-- Catálogo Digital -->
+      <a href="#catalogo" class="bio-link-btn featured-catalog">
+        <div class="bio-link-left">
+          <div class="bio-link-icon-box">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <div class="bio-link-texts">
+            <h3 data-editable="true" id="btn-txt-cat">Catálogo de Productos & Trabajos Reales</h3>
+            <p data-editable="true" id="btn-txt-cat-sub">Toppers 15, cajas sorpresa con pase de abordaje, birretes y K-Pop</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-down bio-link-arrow"></i>
+      </a>
+
+      <!-- Cotizador con Registro Automático a Julieta -->
+      <a href="#cotizador" class="bio-link-btn">
+        <div class="bio-link-left">
+          <div class="bio-link-icon-box">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <div class="bio-link-texts">
+            <h3 data-editable="true" id="btn-txt-quote">Cotizar Pedido Personalizado (Directo a Taller)</h3>
+            <p data-editable="true" id="btn-txt-quote-sub">Se registra en la app del taller para Julieta y abre tu WhatsApp</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-arrow-right bio-link-arrow"></i>
+      </a>
+
+      <!-- Ubicación y Horarios -->
+      <a href="https://maps.google.com/?q=Urbanizacion+El+Soler+San+Francisco+Zulia" target="_blank" class="bio-link-btn">
+        <div class="bio-link-left">
+          <div class="bio-link-icon-box">
+            <i class="fa-solid fa-store"></i>
+          </div>
+          <div class="bio-link-texts">
+            <h3 data-editable="true" id="btn-txt-store">Ubicación del Taller & Horarios</h3>
+            <p data-editable="true" id="btn-txt-store-sub">El Soler, San Francisco • Lun-Vie 8AM-5PM | Sáb 9AM-1PM</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-location-dot bio-link-arrow"></i>
+      </a>
+
+      <!-- Instagram Oficial -->
+      <a href="https://instagram.com/creacionesjj10" target="_blank" class="bio-link-btn">
+        <div class="bio-link-left">
+          <div class="bio-link-icon-box">
+            <i class="fa-brands fa-instagram"></i>
+          </div>
+          <div class="bio-link-texts">
+            <h3 data-editable="true" id="btn-txt-ig">Síguenos en Instagram @creacionesjj10</h3>
+            <p data-editable="true" id="btn-txt-ig-sub">Reels de procesos, fotos de entregas y tips reposteros</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square bio-link-arrow"></i>
+      </a>
+    </div>
+
+    <!-- ========================================================================
+         CATÁLOGO DIGITAL INTERACTIVO CON FOTOS REALES
+         ======================================================================== -->
+    <section id="catalogo" class="catalog-section-container">
+      <div class="section-header-title">
+        <h2 data-editable="true" id="txt-cat-title">Catálogo de Trabajos Recientes</h2>
+        <p data-editable="true" id="txt-cat-sub">Muestras de pedidos entregados en nuestro taller para eventos inolvidables</p>
+      </div>
+
+      <div class="catalog-filter-bar">
+        <button class="cat-filter-btn active" onclick="filterCatalog('all', this)">✨ Todo el Catálogo</button>
+        <button class="cat-filter-btn" onclick="filterCatalog('topper', this)">🎂 Toppers 15 & Bodas</button>
+        <button class="cat-filter-btn" onclick="filterCatalog('caja', this)">🎁 Cajas Sorpresa & Viajes</button>
+        <button class="cat-filter-btn" onclick="filterCatalog('kpop', this)">🎶 K-Pop & Cupcakes</button>
+        <button class="cat-filter-btn" onclick="filterCatalog('birrete', this)">🎓 Birretes de Grado</button>
+        <button class="cat-filter-btn" onclick="filterCatalog('reposteria', this)">🧁 Insumos Repostería</button>
+      </div>
+
+      <div class="products-cards-grid" id="products-catalog-grid">
+        
+        <!-- Producto 1: Topper 15 Años Glitter Espejado -->
+        <div class="prod-card" data-cat="topper">
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Topper de Lujo</span>
+            <img src="./WhatsApp Image 2026-10-03 at 11.02.54.jpeg" alt="Topper 15 Años Glitter Acrílico Espejado" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p1-title">Topper 15 en Acrílico Espejado & Glitter</h3>
+              <p class="prod-desc" data-editable="true" id="p1-desc">Número 15 en corte láser de acrílico espejado con relieve en cartulina glitter plateada holográfica y base transparente que flota sobre la torta.</p>
+            </div>
+            <div>
+              <div class="prod-price-strip">
+                <span class="price-usd" data-editable="true" id="p1-price">Desde $6.00</span>
+                <span class="price-bs">Personalizado al gusto</span>
+              </div>
+              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Me%20interesa%20encargar%20un%20Topper%20de%2015%20Años%20en%20Acrílico%20Espejado" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
+                <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 2: Caja Sorpresa Río Boarding Pass -->
+        <div class="prod-card" data-cat="caja">
+          <div class="prod-img-box">
+            <span class="prod-cat-badge secondary">Caja Sorpresa</span>
+            <img src="./WhatsApp Image 2026-10-03 at 11.02.54 (1).jpeg" alt="Caja Sorpresa Viaje Boarding Pass" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p2-title">Caja Temática de Viaje + Boarding Pass</h3>
+              <p class="prod-desc" data-editable="true" id="p2-desc">Caja lila 'Feliz Cumple Amor Mío' con cámara fotográfica 3D, avión en relieve, mapa mundi y Pase de Abordaje a Río de Janeiro para el agasajado.</p>
+            </div>
+            <div>
+              <div class="prod-price-strip">
+                <span class="price-usd" data-editable="true" id="p2-price">Desde $8.50</span>
+                <span class="price-bs">Incluye ticket de viaje</span>
+              </div>
+              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Deseo%20cotizar%20la%20Caja%20Sorpresa%20con%20Boarding%20Pass%20de%20viaje" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
+                <i class="fa-brands fa-whatsapp"></i> Cotizar Caja Viaje
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 3: Stray Kids K-Pop Cupcake Set -->
+        <div class="prod-card" data-cat="kpop">
+          <div class="prod-img-box">
+            <span class="prod-cat-badge dark">K-Pop Especial</span>
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.01 (3).jpeg" alt="Set Stray Kids Cupcakes" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p3-title">Set Cupcakes K-Pop Stray Kids</h3>
+              <p class="prod-desc" data-editable="true" id="p3-desc">Mini toppers troquelados de cada integrante con gorrito de fiesta metalizado, logo en relieve, cassette NOEASY, notas musicales y estrellas.</p>
+            </div>
+            <div>
+              <div class="prod-price-strip">
+                <span class="price-usd" data-editable="true" id="p3-price">Pack Set: $5.50</span>
+                <span class="price-bs">Torta + 12 cupcakes</span>
+              </div>
+              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Quiero%20el%20set%20de%20toppers%20K-Pop%20Stray%20Kids" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
+                <i class="fa-brands fa-whatsapp"></i> Pedir Set Stray Kids
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 4: Birrete de Graduación No Easy -->
+        <div class="prod-card" data-cat="birrete">
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Graduación</span>
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.01 (1).jpeg" alt="Birrete Graduación This Was So No Easy" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p4-title">Birrete de Grado 'This Was So No Easy'</h3>
+              <p class="prod-desc" data-editable="true" id="p4-desc">Birrete azul eléctrico con rotulado en vinil de alta fijación, relámpagos estilo neón y siluetas de graduandos. Personalizable con cualquier frase o logo.</p>
+            </div>
+            <div>
+              <div class="prod-price-strip">
+                <span class="price-usd" data-editable="true" id="p4-price">Desde $7.00</span>
+                <span class="price-bs">Listo para tu caravana</span>
+              </div>
+              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Me%20interesa%20encargar%20un%20Birrete%20de%20Graduación%20personalizado" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
+                <i class="fa-brands fa-whatsapp"></i> Cotizar Birrete
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 5: Insumos de Repostería y Chantilly -->
+        <div class="prod-card" data-cat="reposteria">
+          <div class="prod-img-box">
+            <span class="prod-cat-badge secondary">Insumos Taller</span>
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.01.jpeg" alt="Insumos Repostería Chantilly" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p5-title">Chantilly L'Antique & Esferas Dulces</h3>
+              <p class="prod-desc" data-editable="true" id="p5-desc">Crema para batir profesional Chantilly L'Antique de 1 Litro, leche condensada y esferas decorativas perladas para tus pasteles.</p>
+            </div>
+            <div>
+              <div class="prod-price-strip">
+                <span class="price-usd" data-editable="true" id="p5-price">Precios Mostrador</span>
+                <span class="price-bs">Disponibilidad inmediata</span>
+              </div>
+              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Quiero%20consultar%20precio%20de%20Chantilly%20y%20artículos%20de%20repostería" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
+                <i class="fa-brands fa-whatsapp"></i> Consultar Insumos
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 6: Identidad de Marca y Cartelería 3D -->
+        <div class="prod-card" data-cat="topper">
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Acrílico 3D</span>
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.02 (2).jpeg" alt="Logo Creaciones JJ 3D" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p6-title">Logos y Placas Corporativas en Acrílico</h3>
+              <p class="prod-desc" data-editable="true" id="p6-desc">Logos corporativos y familiares en acrílico multicapa con base brillante para mostradores, sesiones de fotos o entradas de negocio.</p>
+            </div>
+            <div>
+              <div class="prod-price-strip">
+                <span class="price-usd" data-editable="true" id="p6-price">A Medida</span>
+                <span class="price-bs">Presupuesto según tamaño</span>
+              </div>
+              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Deseo%20cotizar%20un%20Logo%20o%20Placa%20en%20Acrílico%203D" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
+                <i class="fa-brands fa-whatsapp"></i> Cotizar Acrílico 3D
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         CONSTRUCTOR DE PEDIDOS AUTOMÁTICO (ASIGNADO A JULIETA + WHATSAPP)
+         ======================================================================== -->
+    <section id="cotizador" class="customizer-box">
+      <div class="section-header-title" style="margin-bottom: 20px;">
+        <h2 data-editable="true" id="txt-form-title">Cotizador Directo a Taller</h2>
+        <p data-editable="true" id="txt-form-sub">Tu pedido se registra automáticamente en la app interna del taller asignado a <strong>Julieta</strong> y te abre WhatsApp con un clic</p>
+      </div>
+
+      <div class="customizer-badge-info">
+        <i class="fa-solid fa-bolt" style="font-size: 1.2rem;"></i>
+        <span><strong>Conexión Directa:</strong> Al presionar enviar, nuestro sistema en Google Sheets registra tu encargo de inmediato para que el equipo comience a prepararlo.</span>
+      </div>
+
+      <form id="order-custom-form" onsubmit="handleOrderSubmitWithGas(event)">
+        <div class="form-grid-row">
+          <div class="form-group-field">
+            <label for="order-client"><i class="fa-solid fa-user"></i> Tu Nombre y Apellido</label>
+            <input type="text" id="order-client" placeholder="Ej: María Ochoa / Carlos Risquez" required />
+          </div>
+
+          <div class="form-group-field">
+            <label for="order-phone"><i class="fa-solid fa-phone"></i> Tu Teléfono / WhatsApp</label>
+            <input type="tel" id="order-phone" placeholder="Ej: 0414-1234567" required />
+          </div>
+        </div>
+
+        <div class="form-grid-row">
+          <div class="form-group-field">
+            <label for="order-cat"><i class="fa-solid fa-shapes"></i> Tipo de Trabajo</label>
+            <select id="order-cat" required>
+              <option value="Topper 15 Años / Boda Espejado">🎂 Topper 15 Años / Boda (Acrílico & Glitter)</option>
+              <option value="Caja Sorpresa con Boarding Pass">🎁 Caja Sorpresa Temática (Viajes / Cumple)</option>
+              <option value="Set Cupcakes / Toppers K-Pop">🎶 Set Cupcakes K-Pop (Stray Kids u otro)</option>
+              <option value="Birrete de Graduación">🎓 Birrete de Grado Personalizado</option>
+              <option value="DTF Textil / Franela">👕 Franela DTF Textil Full Color</option>
+              <option value="Taza Personalizada / Mágica">☕ Taza de Cerámica o Mágica</option>
+              <option value="Libreta o Agenda Escolar">📚 Libreta / Agenda Holográfica</option>
+              <option value="Insumos de Repostería">🧁 Insumos de Repostería (Chantilly / Esferas)</option>
+              <option value="Otro Trabajo a Medida">✨ Otro Pedido Especial</option>
+            </select>
+          </div>
+
+          <div class="form-group-field">
+            <label for="order-theme"><i class="fa-solid fa-palette"></i> Motivo o Temática</label>
+            <input type="text" id="order-theme" placeholder="Ej: 15 Años Plateado, Río de Janeiro, Stray Kids..." required />
+          </div>
+        </div>
+
+        <div class="form-grid-row">
+          <div class="form-group-field">
+            <label for="order-name-text"><i class="fa-solid fa-signature"></i> Nombre / Edad a Colocar</label>
+            <input type="text" id="order-name-text" placeholder="Ej: Samantha / Matías 5 Años..." required />
+          </div>
+
+          <div class="form-group-field">
+            <label for="order-date"><i class="fa-regular fa-calendar"></i> ¿Para qué fecha lo necesitas?</label>
+            <input type="date" id="order-date" required />
+          </div>
+        </div>
+
+        <div class="form-group-field">
+          <label for="order-notes"><i class="fa-regular fa-comment-dots"></i> Detalles Adicionales, Medidas o Colores</label>
+          <textarea id="order-notes" rows="3" placeholder="Ej: Diámetro de torta de 20cm, colores lila y dorado, deseo soporte transparente..."></textarea>
+        </div>
+
+        <button type="submit" id="btn-submit-order" class="btn-submit-order-wa">
+          <i class="fa-solid fa-paper-plane"></i> <span>Registrar Pedido en Taller & Enviar a WhatsApp</span>
+        </button>
+
+        <div id="order-alert-box" class="order-status-alert"></div>
+      </form>
+    </section>
+
+    <!-- ========================================================================
+         TALLER INFO & FAITH
+         ======================================================================== -->
+    <div class="workshop-faith-banner">
+      <div class="faith-verse">
+        <i class="fa-solid fa-hands-praying"></i> "Todo lo puedo en Cristo que me fortalece" — Filipenses 4:13
+      </div>
+      <p class="faith-desc" data-editable="true" id="txt-faith-desc">
+        Somos un taller familiar comprometido con la excelencia, la puntualidad y el amor en cada detalle. Cada encargo es elaborado con materiales de primera calidad y cuidado milimétrico.
+      </p>
+
+      <div class="shipping-strip">
+        <span>🚚 Envíos a todo el país:</span>
+        <span class="shipping-badge-pill">MRW</span>
+        <span class="shipping-badge-pill">Zoom</span>
+        <span class="shipping-badge-pill">Tealca</span>
+        <span class="shipping-badge-pill">Domesa</span>
+        <span>| 📍 Retiro en mostrador en San Francisco, Zulia</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-bio">
+      <p>© 2026 Creaciones JJ — Ochoa & Risquez. Todos los derechos reservados.</p>
+      <p style="margin-top: 4px; opacity: 0.8;">Urbanización El Soler, Lote 4, Calle 203. San Francisco, Zulia • 0414-164-6511</p>
+    </footer>
+
+  </div>
+
+  <!-- Floating WhatsApp Action -->
+  <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20%F0%9F%91%8B%20Deseo%20informaci%C3%B3n%20inmediata" target="_blank" class="wa-floating-btn" title="Contactar por WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- JAVASCRIPT -->
   <script>
-    /* ---- PWA y Registro de Service Worker para PC / Móvil ---- */
+    // URL OFICIAL DE LA APP DE PRODUCCION (GOOGLE APPS SCRIPT)
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_mIt5VzEOZjKb6znpYXH_T0Q0jJfEqr5UB1Z8l0JpUiHfEC9CuRuK9z2s_Q3lNl6www/exec";
+
+    // PWA Service Worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('./sw.js?v=2').then(function(reg) {
-          console.log('SW Creaciones JJ registrado:', reg.scope);
-        }).catch(function(err) {
-          console.warn('Error al registrar SW:', err);
-        });
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW err:', err));
       });
     }
 
-    window.deferredInstallPrompt = null;
-    window.addEventListener('beforeinstallprompt', function(e) {
-      e.preventDefault();
-      window.deferredInstallPrompt = e;
-      document.querySelectorAll('.pwa-install-btn').forEach(function(b) {
-        b.style.display = 'flex';
-      });
+    // Inicialización y Carga de Ediciones
+    window.addEventListener('DOMContentLoaded', () => {
+      loadEditsFromStorage();
     });
 
-    window.addEventListener('appinstalled', function() {
-      window.deferredInstallPrompt = null;
-      console.log('Creaciones JJ instalada como App.');
-    });
+    // MODO EDICION LOGIC
+    let isEditMode = false;
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const body = document.body;
+      const btn = document.getElementById('btn-toggle-editor');
+      const text = document.getElementById('editor-btn-text');
 
-    window.triggerPwaInstall = async function() {
-      if (window.deferredInstallPrompt) {
-        window.deferredInstallPrompt.prompt();
-        const choice = await window.deferredInstallPrompt.userChoice;
-        if (choice.outcome === 'accepted') {
-          console.log('Instalación aceptada.');
-        }
-        window.deferredInstallPrompt = null;
+      if (isEditMode) {
+        body.classList.add('editor-mode-active');
+        btn.classList.add('active');
+        text.textContent = 'Modo Edición: ON';
+        document.querySelectorAll('[data-editable="true"]').forEach(el => {
+          el.contentEditable = "true";
+        });
+        alert("✏️ Modo Edición Activado: Puedes hacer clic y cambiar cualquier texto o precio en la pantalla. Cuando termines, haz clic en 'Guardar Cambios'.");
       } else {
-        alert('Para instalar Creaciones JJ como App en tu computadora:\n\n1. En Google Chrome o Microsoft Edge, busca el ícono de instalación (una pantalla pequeña con flecha hacia abajo) a la derecha en la barra de direcciones.\n2. O pulsa el menú del navegador (los 3 puntos ⋮ arriba a la derecha) y haz clic en "Instalar Creaciones JJ".');
+        body.classList.remove('editor-mode-active');
+        btn.classList.remove('active');
+        text.textContent = 'Modo Edición: OFF';
+        document.querySelectorAll('[data-editable="true"]').forEach(el => {
+          el.contentEditable = "false";
+        });
+        alert("👁️ Modo Presentación Activado: Vista limpia ejecutiva para dirección.");
       }
-    };
+    }
 
-    /* ---- Backup / Restore desde localStorage ---- */
-    window.exportarBackup = function () {
-      const datos = {};
-      for (let i = 0; i < localStorage.length; i++) {
-        const clave = localStorage.key(i);
-        datos[clave] = localStorage.getItem(clave);
-      }
-      if (!Object.keys(datos).length) {
-        alert("No hay datos guardados para exportar.");
-        return;
-      }
-      const blob = new Blob([JSON.stringify(datos, null, 2)], { type: "application/json" });
-      const url  = URL.createObjectURL(blob);
-      const a    = document.createElement("a");
-      a.href     = url;
-      a.download = `backup_creaciones_jj_${new Date().toISOString().split("T")[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    };
+    function saveEditsToStorage() {
+      const edits = {};
+      document.querySelectorAll('[data-editable="true"]').forEach(el => {
+        if (el.id) edits[el.id] = el.innerHTML;
+      });
+      localStorage.setItem('creaciones_jj_landing_edits', JSON.stringify(edits));
+      alert("💾 ¡Cambios guardados con éxito en la memoria del navegador!");
+    }
 
-    window.importarBackup = function (event) {
-      const archivo = event.target.files[0];
-      if (!archivo) return;
-      const lector = new FileReader();
-      lector.onload = function (e) {
+    function loadEditsFromStorage() {
+      const saved = localStorage.getItem('creaciones_jj_landing_edits');
+      if (saved) {
         try {
-          const datos = JSON.parse(e.target.result);
-          for (const k in datos) localStorage.setItem(k, datos[k]);
-          alert("¡Copia restaurada! La página se actualizará.");
-          window.location.reload();
-        } catch {
-          alert("El archivo no es un JSON válido.");
+          const edits = JSON.parse(saved);
+          for (let id in edits) {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = edits[id];
+          }
+        } catch(e) {}
+      }
+    }
+
+    function resetEditsFromStorage() {
+      if (confirm("¿Restablecer todos los textos a los valores originales?")) {
+        localStorage.removeItem('creaciones_jj_landing_edits');
+        location.reload();
+      }
+    }
+
+    // Filtro del Catálogo
+    function filterCatalog(category, btn) {
+      document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.prod-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-cat') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
         }
+      });
+    }
+
+    // MANEJO DE PEDIDO CON REGISTRO DIRECTO A JULIETA + WHATSAPP
+    async function handleOrderSubmitWithGas(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('btn-submit-order');
+      const alertBox = document.getElementById('order-alert-box');
+
+      const client = document.getElementById('order-client').value.trim();
+      const phone = document.getElementById('order-phone').value.trim();
+      const cat = document.getElementById('order-cat').value;
+      const theme = document.getElementById('order-theme').value.trim();
+      const nameText = document.getElementById('order-name-text').value.trim();
+      const date = document.getElementById('order-date').value;
+      const notes = document.getElementById('order-notes').value.trim();
+
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Registrando en taller de Creaciones JJ...`;
+
+      // 1. Payload para la App de Producción de Creaciones JJ asignado a Julieta
+      const gasPayload = {
+        action: "profile_create_order",
+        cliente: client,
+        telefono: phone,
+        tipo: cat,
+        motivo: theme + (nameText ? ` (Nombre: ${nameText})` : ""),
+        fechaEntrega: date,
+        horaEntrega: "18:00",
+        responsable: "Julieta", // Asignado directamente a Julieta
+        descripcion: (notes ? notes + " • " : "") + "[Pedido Web Automático - Asignado a Julieta]",
+        origen: "Web PWA Bio-Link",
+        estado: "Pendiente"
       };
-      lector.readAsText(archivo);
-    };
+
+      // 2. Envío asíncrono a Google Apps Script
+      try {
+        fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(gasPayload)
+        });
+      } catch (err) {
+        console.warn("GAS fetch error (fallback WhatsApp activado):", err);
+      }
+
+      // 3. Formatear mensaje para WhatsApp
+      const waMessage = 
+`¡Hola Creaciones JJ! 👋✂️
+He registrado un pedido a medida desde su página web:
+
+👤 *Cliente:* ${client}
+📞 *Teléfono:* ${phone}
+📌 *Tipo de Trabajo:* ${cat}
+🎨 *Motivo / Temática:* ${theme}
+✨ *Nombre / Edad:* ${nameText}
+📅 *Fecha Requerida:* ${date}
+${notes ? `📝 *Detalles:* ${notes}\n` : ''}
+*(El pedido ya fue registrado en el sistema del taller asignado a Julieta)*.
+¿Podrían confirmarme recepción por favor?`;
+
+      const whatsappUrl = `https://wa.me/584141646511?text=${encodeURIComponent(waMessage)}`;
+
+      // 4. Mostrar confirmación en pantalla
+      alertBox.className = "order-status-alert success";
+      alertBox.innerHTML = `🎉 <strong>¡Pedido registrado exitosamente!</strong> Se ha ingresado en la app del taller asignado a <strong>Julieta</strong> y abriendo WhatsApp...`;
+      
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Registrar Pedido en Taller & Enviar a WhatsApp</span>`;
+      }, 1000);
+    }
   </script>
-
-  <!-- =========================================================
-       PALETA DE COMANDOS GLOBAL (SPOTLIGHT GLOBAL) HTML
-       ========================================================= -->
-  <div id="sics-spotlight-overlay">
-    <div class="spotlight-box">
-      <div class="spotlight-header">
-        <i class="fas fa-search"></i>
-        <input type="text" id="spotlight-search" class="spotlight-input" placeholder="¿Qué deseas buscar o hacer? (pedidos, clientes, acciones)..." autocomplete="off" spellcheck="false">
-      </div>
-      <div class="spotlight-results" id="spotlight-list">
-        <!-- Inyectado dinámicamente -->
-      </div>
-      <div class="spotlight-footer">
-        <span><span class="kbd-btn"><i class="fas fa-arrow-up"></i></span> <span class="kbd-btn"><i class="fas fa-arrow-down"></i></span> Navegar</span>
-        <span><span class="kbd-btn">Enter</span> Seleccionar</span>
-        <span><span class="kbd-btn">Esc</span> Cerrar</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================
-       ASISTENTE VIRTUAL POR VOZ & CHAT FLOTANTE (JJ-BOT)
-       ========================================================= -->
-  <div id="jj-bot-button" onclick="toggleJJBot()" title="Asistente de Voz y Ayuda Inteligente">
-    <i class="fas fa-robot" style="font-size: 1.4rem;"></i>
-  </div>
-
-  <div id="jj-bot-window" class="chat-hidden">
-    <div class="jj-bot-header">
-      <div class="jj-bot-info">
-        <div style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center;">
-          <i class="fas fa-robot"></i>
-        </div>
-        <div>
-          <h4>JJ-Bot Asistente</h4>
-          <p>• Dictado por Voz &amp; Ayuda Operativa</p>
-        </div>
-      </div>
-      <button class="close-button" style="color:white; font-size:22px; background:none; border:none; cursor:pointer;" onclick="toggleJJBot()">×</button>
-    </div>
-
-    <div class="jj-bot-body" id="jj-bot-body">
-      <div style="background:rgba(14,165,233,0.08); padding:12px; border-radius:12px; font-size:12.5px; line-height:1.4;">
-        👋 <strong>¡Hola! Soy JJ-Bot.</strong> Puedes dictarme un pedido por voz o escribirlo como prefieras.
-        <br/><br/>
-        🎙️ <em>Ejemplo:</em> "Pedido para María, 2 toppers de Barbie y 15 stickers para hoy a las 5 de la tarde".
-      </div>
-      <div id="jj-bot-confirm-area"></div>
-    </div>
-
-    <div class="jj-bot-footer">
-      <button type="button" id="jj-mic-btn" class="mic-action-btn" onclick="toggleSpeechRecognition()" title="Presiona para dictar por voz">
-        <i class="fas fa-microphone"></i>
-      </button>
-      <input type="text" id="jj-bot-input" class="jj-bot-input" placeholder="Escribe o presiona el micrófono..." onkeypress="if(event.key==='Enter') processBotMessage()">
-      <button type="button" class="primary-button" style="padding:8px 14px; border-radius:20px; font-size:12px;" onclick="processBotMessage()">
-        Enviar
-      </button>
-    </div>
-  </div>
-
 </body>
 </html>
