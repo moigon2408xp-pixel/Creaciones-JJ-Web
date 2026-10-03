@@ -80,6 +80,13 @@
     }
 
     /* MODO EDICION BARRA FLOTANTE */
+    /* Ocultar barra de edicion por defecto en GitHub Pages */
+    .editor-control-bar {
+      display: none !important;
+    }
+    body.admin-authorized .editor-control-bar {
+      display: flex !important;
+    }
     .editor-control-bar {
       position: fixed;
       bottom: 24px;
@@ -771,12 +778,13 @@
         <a href="https://facebook.com/jorge.ochoagomez.94" target="_blank" class="bio-social-icon fb" title="Facebook Creaciones JJ">
           <i class="fa-brands fa-facebook-f"></i>
         </a>
+        <a href="https://tiktok.com/@creacionesjj10" target="_blank" class="bio-social-icon tt" style="background:#000; color:#fff;" title="TikTok @creacionesjj10">
+          <i class="fa-brands fa-tiktok"></i>
+        </a>
         <a href="mailto:creacionesjj10@gmail.com" class="bio-social-icon" title="Correo Electrónico">
           <i class="fa-regular fa-envelope"></i>
         </a>
-        <a href="./dashboard-redes-sociales.html" target="_blank" class="bio-social-icon" title="Dashboard Redes Sociales">
-          <i class="fa-solid fa-chart-pie"></i>
-        </a>
+        
       </div>
     </header>
 
@@ -1139,6 +1147,34 @@
       loadEditsFromStorage();
     });
 
+    
+    // CONTROL DE SEGURIDAD MODO EDICION (SOLO ADMINISTRADOR MOISES)
+    (function initAdminSecurity() {
+      const ADMIN_PIN = "2026";
+      const urlParams = new URLSearchParams(window.location.search);
+      const isLocal = window.location.protocol === "file:" || window.location.hostname === "localhost";
+      const hasUrlKey = urlParams.get("admin") === ADMIN_PIN || window.location.hash === "#admin";
+      const hasStorageAuth = localStorage.getItem("jj_admin_auth") === "true";
+
+      if (isLocal || hasUrlKey || hasStorageAuth) {
+        document.body.classList.add("admin-authorized");
+      }
+
+      window.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "e") {
+          e.preventDefault();
+          const pass = prompt("🔐 Ingrese PIN de Administrador de Creaciones JJ:");
+          if (pass === ADMIN_PIN) {
+            localStorage.setItem("jj_admin_auth", "true");
+            document.body.classList.add("admin-authorized");
+            alert("✅ Modo Administrador activado. Ya puedes editar el contenido.");
+          } else if (pass !== null) {
+            alert("❌ PIN incorrecto.");
+          }
+        }
+      });
+    })();
+
     // MODO EDICION LOGIC
     let isEditMode = false;
     function toggleEditMode() {
@@ -1255,20 +1291,19 @@
         console.warn("GAS fetch error (fallback WhatsApp activado):", err);
       }
 
-      // 3. Formatear mensaje para WhatsApp
+      // 3. Formatear mensaje para WhatsApp (Limpio y Ejecutivo)
       const waMessage = 
-`¡Hola Creaciones JJ! 👋✂️
-He registrado un pedido a medida desde su página web:
-
+`🎨 *NUEVO PEDIDO - CREACIONES JJ* 🎨
+━━━━━━━━━━━━━━━━━━━━
 👤 *Cliente:* ${client}
 📞 *Teléfono:* ${phone}
-📌 *Tipo de Trabajo:* ${cat}
-🎨 *Motivo / Temática:* ${theme}
-✨ *Nombre / Edad:* ${nameText}
+📦 *Tipo de Trabajo:* ${cat}
+🎈 *Temática:* ${theme}
+🎂 *Nombre / Edad:* ${nameText || 'No especificado'}
 📅 *Fecha Requerida:* ${date}
-${notes ? `📝 *Detalles:* ${notes}\n` : ''}
-*(El pedido ya fue registrado en el sistema del taller asignado a Julieta)*.
-¿Podrían confirmarme recepción por favor?`;
+${notes ? `📝 *Detalles:* ${notes}
+` : ''}━━━━━━━━━━━━━━━━━━━━
+*(Enviado desde el catálogo web oficial)*`;
 
       const whatsappUrl = `https://wa.me/584141646511?text=${encodeURIComponent(waMessage)}`;
 
