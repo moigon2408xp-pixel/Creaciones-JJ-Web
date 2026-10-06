@@ -724,11 +724,24 @@
 </head>
 <body>
 
-  <!-- Floating Editor Bar for Management Presentation -->
-  <div class="editor-control-bar">
+  <!-- Floating Editor Bar for Management Presentation (Con Selector de Colores) -->
+  <div class="editor-control-bar" style="flex-wrap: wrap; gap: 8px;">
     <button class="editor-toggle-btn" id="btn-toggle-editor" onclick="toggleEditMode()">
       <i class="fa-solid fa-pencil"></i> <span id="editor-btn-text">Modo Edición: OFF</span>
     </button>
+    
+    <!-- Controles de Color de Texto y Fondo para Objetos -->
+    <div id="editor-color-pickers-box" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.15); padding:3px 10px; border-radius:20px;">
+      <label style="font-size:11.5px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;" title="Cambiar color del texto del objeto seleccionado">
+        <span>🎨 Texto:</span>
+        <input type="color" id="editor-text-color-picker" value="#006a46" onchange="applySelectedTextColor(this.value)" style="width:22px; height:22px; border:none; border-radius:50%; cursor:pointer; background:none;">
+      </label>
+      <label style="font-size:11.5px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;" title="Cambiar color de fondo del objeto seleccionado">
+        <span>🖌️ Fondo:</span>
+        <input type="color" id="editor-bg-color-picker" value="#53feb6" onchange="applySelectedBgColor(this.value)" style="width:22px; height:22px; border:none; border-radius:50%; cursor:pointer; background:none;">
+      </label>
+    </div>
+
     <button class="editor-save-btn" onclick="saveEditsToStorage()">
       <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
     </button>
@@ -762,10 +775,10 @@
       <p class="bio-slogan" data-editable="true" id="txt-landing-slogan">Tu imaginación, nuestra creación</p>
       
       <div class="bio-tags-row">
-        <span class="bio-tag accent">🎂 Toppers 15 Años & Bodas</span>
-        <span class="bio-tag accent">🎁 Cajas Sorpresa & Viajes</span>
-        <span class="bio-tag">🎓 Birretes de Grado</span>
-        <span class="bio-tag">🇻🇪 Envíos Nacionales</span>
+        <span class="bio-tag accent" data-editable="true" id="tag-banner-1">🎂 Toppers 15 Años & Bodas</span>
+        <span class="bio-tag accent" data-editable="true" id="tag-banner-2">🎁 Cajas Sorpresa & Viajes</span>
+        <span class="bio-tag" data-editable="true" id="tag-banner-3">🎓 Birretes de Grado</span>
+        <span class="bio-tag" data-editable="true" id="tag-banner-4">🇻🇪 Envíos Nacionales</span>
       </div>
 
       <div class="bio-social-bar">
@@ -778,7 +791,7 @@
         <a href="https://facebook.com/jorge.ochoagomez.94" target="_blank" class="bio-social-icon fb" title="Facebook Creaciones JJ">
           <i class="fa-brands fa-facebook-f"></i>
         </a>
-        <a href="https://tiktok.com/@creacionesjj10" target="_blank" class="bio-social-icon tt" style="background:#000; color:#fff;" title="TikTok @creacionesjj10">
+        <a href="https://tiktok.com/@creacionesjj10" target="_blank" class="bio-social-icon tt" id="social-icon-tt" data-editable="true" title="TikTok @creacionesjj10">
           <i class="fa-brands fa-tiktok"></i>
         </a>
         <a href="mailto:creacionesjj10@gmail.com" class="bio-social-icon" title="Correo Electrónico">
@@ -977,7 +990,7 @@
         <div class="prod-card" data-cat="reposteria">
           <div class="prod-img-box">
             <span class="prod-cat-badge secondary">Insumos Taller</span>
-            <img src="./WhatsApp Image 2026-10-03 at 11.03.01.jpeg" alt="Insumos Repostería Chantilly" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.18.jpeg" alt="Insumos Repostería Chantilly & Leches" />
           </div>
           <div class="prod-body">
             <div>
@@ -1202,20 +1215,90 @@
       }
     }
 
+        let currentActiveEditableEl = null;
+
+    // Escuchar qué elemento editable está seleccionado para aplicar colores
+    document.addEventListener("click", (e) => {
+      if (!isEditMode) return;
+      const target = e.target.closest('[data-editable="true"]');
+      if (target) {
+        currentActiveEditableEl = target;
+        // Resaltar elemento activo
+        document.querySelectorAll('[data-editable="true"]').forEach(el => el.style.outline = "2px dashed #008559");
+        target.style.outline = "2.5px solid #fe2c55";
+        
+        // Sincronizar selectores de color con el elemento activo
+        const compStyle = window.getComputedStyle(target);
+        const rgbToHex = (rgb) => {
+          const m = rgb.match(/\d+/g);
+          if (!m || m.length < 3) return "#000000";
+          return "#" + ((1 << 24) + (parseInt(m[0]) << 16) + (parseInt(m[1]) << 8) + parseInt(m[2])).toString(16).slice(1);
+        };
+        const txtPicker = document.getElementById("editor-text-color-picker");
+        const bgPicker = document.getElementById("editor-bg-color-picker");
+        if (txtPicker && compStyle.color) txtPicker.value = rgbToHex(compStyle.color);
+        if (bgPicker && compStyle.backgroundColor && compStyle.backgroundColor !== "rgba(0, 0, 0, 0)") {
+          bgPicker.value = rgbToHex(compStyle.backgroundColor);
+        }
+      }
+    });
+
+    window.applySelectedTextColor = function(color) {
+      if (!currentActiveEditableEl) {
+        alert("Primero haz clic sobre el texto o banner que deseas cambiar.");
+        return;
+      }
+      currentActiveEditableEl.style.color = color;
+    };
+
+    window.applySelectedBgColor = function(color) {
+      if (!currentActiveEditableEl) {
+        alert("Primero haz clic sobre el banner u objeto que deseas cambiar.");
+        return;
+      }
+      currentActiveEditableEl.style.backgroundColor = color;
+      currentActiveEditableEl.style.background = color;
+    };
+
     function saveEditsToStorage() {
       const edits = {};
       document.querySelectorAll('[data-editable="true"]').forEach(el => {
-        if (el.id) edits[el.id] = el.innerHTML;
+        if (el.id) {
+          edits[el.id] = {
+            html: el.innerHTML,
+            color: el.style.color || "",
+            background: el.style.background || el.style.backgroundColor || ""
+          };
+        }
       });
-      localStorage.setItem('creaciones_jj_landing_edits', JSON.stringify(edits));
-      alert("💾 ¡Cambios guardados con éxito en la memoria del navegador!");
+      localStorage.setItem('creaciones_jj_landing_edits_v2', JSON.stringify(edits));
+      alert("💾 ¡Textos y colores guardados con éxito en la memoria del navegador!");
     }
 
     function loadEditsFromStorage() {
-      const saved = localStorage.getItem('creaciones_jj_landing_edits');
-      if (saved) {
+      const savedV2 = localStorage.getItem('creaciones_jj_landing_edits_v2');
+      if (savedV2) {
         try {
-          const edits = JSON.parse(saved);
+          const edits = JSON.parse(savedV2);
+          for (let id in edits) {
+            const el = document.getElementById(id);
+            if (el) {
+              if (edits[id].html !== undefined) el.innerHTML = edits[id].html;
+              if (edits[id].color) el.style.color = edits[id].color;
+              if (edits[id].background) {
+                el.style.background = edits[id].background;
+                el.style.backgroundColor = edits[id].background;
+              }
+            }
+          }
+          return;
+        } catch(e) {}
+      }
+      // Fallback v1
+      const savedV1 = localStorage.getItem('creaciones_jj_landing_edits');
+      if (savedV1) {
+        try {
+          const edits = JSON.parse(savedV1);
           for (let id in edits) {
             const el = document.getElementById(id);
             if (el) el.innerHTML = edits[id];
