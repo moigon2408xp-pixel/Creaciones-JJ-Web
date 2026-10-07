@@ -808,6 +808,35 @@
       box-shadow: 0 8px 20px rgba(0, 106, 70, 0.25);
     }
 
+  
+    /* BOTÓN CAMBIAR FOTO EN MODO EDICIÓN */
+    .prod-img-change-btn {
+      display: none;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .editor-mode-active .prod-img-change-btn {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 4px;
+    }
+    .prod-img-box {
+      position: relative;
+      min-height: 220px;
+      background: var(--surface-container, #f3f4f6);
+    }
+
   </style>
 </head>
 <body>
@@ -990,7 +1019,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-1')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Topper de Lujo</span>
-            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.02.54.jpeg" alt="Topper 15 Años Glitter Acrílico Espejado" id="prod-img-1" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-03 at 11.02.54.jpeg" alt="Topper 15 Años Glitter Acrílico Espejado" id="prod-img-1" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1002,8 +1031,7 @@
                 <span class="prod-price-val" data-editable="true" id="p1-price">$12.00</span>
                 <span class="prod-status-tag stock">Personalizado</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Topper 15 Acrílico Espejado', 'topper', 12.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Topper 15 Acrílico Espejado', 'topper', 12.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1014,7 +1042,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-2')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Caja Sorpresa</span>
-            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.02.54%20(1).jpeg" alt="Caja Maleta de Viaje con Boarding Pass personalizado" id="prod-img-2" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-03 at 11.02.54 (1).jpeg" alt="Caja Maleta de Viaje con Boarding Pass personalizado" id="prod-img-2" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1026,8 +1054,7 @@
                 <span class="prod-price-val" data-editable="true" id="p2-price">$16.00</span>
                 <span class="prod-status-tag stock">A Medida</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Caja Maleta de Viaje Sorpresa', 'caja', 16.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Caja Maleta de Viaje Sorpresa', 'caja', 16.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1038,7 +1065,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-3')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Mini Toppers</span>
-            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.03.01%20(3).jpeg" alt="Set de Toppers para Cupcakes Stray Kids" id="prod-img-3" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.01 (3).jpeg" alt="Set de Toppers para Cupcakes Stray Kids" id="prod-img-3" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1050,8 +1077,7 @@
                 <span class="prod-price-val" data-editable="true" id="p3-price">$8.50</span>
                 <span class="prod-status-tag stock">Pack x12</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Set Mini Toppers Stray Kids', 'topper', 8.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Set Mini Toppers Stray Kids', 'topper', 8.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1062,7 +1088,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-4')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Graduación</span>
-            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.03.01%20(1).jpeg" alt="Birrete de Grado Decorado 3D" id="prod-img-4" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.01 (1).jpeg" alt="Birrete de Grado Decorado 3D" id="prod-img-4" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1074,8 +1100,7 @@
                 <span class="prod-price-val" data-editable="true" id="p4-price">$22.00</span>
                 <span class="prod-status-tag stock">Exclusivo</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Birrete Grado Decorado', 'birrete', 22.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Birrete Grado Decorado', 'birrete', 22.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1086,7 +1111,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-5')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Insumos Pastelería</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.18.jpeg" alt="Crema Chantilly L'Antique e Insumos Dulces" id="prod-img-5" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.18.jpeg" alt="Crema Chantilly L'Antique e Insumos Dulces" id="prod-img-5" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1098,8 +1123,7 @@
                 <span class="prod-price-val" data-editable="true" id="p5-price">$6.50</span>
                 <span class="prod-status-tag stock">Disponible</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Chantilly L Antique e Insumos', 'pasteleria', 6.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Chantilly L Antique e Insumos', 'pasteleria', 6.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1110,7 +1134,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-6')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Corporativo</span>
-            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.03.02%20(2).jpeg" alt="Placas y Logos en Acrílico Espejado" id="prod-img-6" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-03 at 11.03.02 (2).jpeg" alt="Placas y Logos en Acrílico Espejado" id="prod-img-6" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1122,8 +1146,7 @@
                 <span class="prod-price-val" data-editable="true" id="p6-price">$18.00</span>
                 <span class="prod-status-tag stock">A Medida</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Logo en Acrílico Espejado', 'corporativo', 18.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Logo en Acrílico Espejado', 'corporativo', 18.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1134,7 +1157,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-7')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Brillos y Acabados</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.19%20(1).jpeg" alt="Polvos de Hadas y Glitter Comestible Repostería" id="prod-img-7" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.19 (1).jpeg" alt="Polvos de Hadas y Glitter Comestible Repostería" id="prod-img-7" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1146,8 +1169,7 @@
                 <span class="prod-price-val" data-editable="true" id="p7-price">$4.50</span>
                 <span class="prod-status-tag stock">En Stock</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Polvo de Hadas Comestible', 'pasteleria', 4.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Polvo de Hadas Comestible', 'pasteleria', 4.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1158,7 +1180,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-8')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Moldes y Cortes</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.19.jpeg" alt="Cortadores y Moldes para Fondant" id="prod-img-8" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.19.jpeg" alt="Cortadores y Moldes para Fondant" id="prod-img-8" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1170,8 +1192,7 @@
                 <span class="prod-price-val" data-editable="true" id="p8-price">$5.00</span>
                 <span class="prod-status-tag stock">Variedad</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Cortadores y Moldes Fondant', 'pasteleria', 5.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Cortadores y Moldes Fondant', 'pasteleria', 5.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1182,7 +1203,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-9')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Decoración Dulce</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.20.jpeg" alt="Sprinkles, Perlas Dulces y Grajeas Metalizadas" id="prod-img-9" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.20.jpeg" alt="Sprinkles, Perlas Dulces y Grajeas Metalizadas" id="prod-img-9" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1194,8 +1215,7 @@
                 <span class="prod-price-val" data-editable="true" id="p9-price">$3.50</span>
                 <span class="prod-status-tag stock">Mix 100g</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Sprinkles y Perlas Metalizadas', 'pasteleria', 3.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Sprinkles y Perlas Metalizadas', 'pasteleria', 3.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1206,7 +1226,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-10')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Cake Topper 3D</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.21.jpeg" alt="Esferas Acrílicas y Globos Cake Topper 3D" id="prod-img-10" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.21.jpeg" alt="Esferas Acrílicas y Globos Cake Topper 3D" id="prod-img-10" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1218,8 +1238,7 @@
                 <span class="prod-price-val" data-editable="true" id="p10-price">$7.00</span>
                 <span class="prod-status-tag stock">Set x5</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Esferas Acrilicas para Torta', 'topper', 7.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Esferas Acrilicas para Torta', 'topper', 7.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1230,7 +1249,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-11')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Soportes</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.25.jpeg" alt="Bases para Tortas y Discos MDF Reforzados" id="prod-img-11" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.25.jpeg" alt="Bases para Tortas y Discos MDF Reforzados" id="prod-img-11" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1242,8 +1261,7 @@
                 <span class="prod-price-val" data-editable="true" id="p11-price">$4.00</span>
                 <span class="prod-status-tag stock">Varios Tamaños</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Bases de Torta MDF', 'pasteleria', 4.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Bases de Torta MDF', 'pasteleria', 4.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1254,7 +1272,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-12')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Packaging</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.27.jpeg" alt="Cintas y Lazos para Packaging Dulce" id="prod-img-12" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.27.jpeg" alt="Cintas y Lazos para Packaging Dulce" id="prod-img-12" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1266,8 +1284,7 @@
                 <span class="prod-price-val" data-editable="true" id="p12-price">$3.00</span>
                 <span class="prod-status-tag stock">Rollo 20m</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Cintas de Raso y Lazos', 'cajas', 3.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Cintas de Raso y Lazos', 'cajas', 3.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1278,7 +1295,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-13')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Celebración</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.49%20(1).jpeg" alt="Velas Sparkler y Bengalas de Cumpleaños" id="prod-img-13" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.49 (1).jpeg" alt="Velas Sparkler y Bengalas de Cumpleaños" id="prod-img-13" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1290,8 +1307,7 @@
                 <span class="prod-price-val" data-editable="true" id="p13-price">$2.50</span>
                 <span class="prod-status-tag stock">Pack x2</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Velas Volcan Sparkler', 'pasteleria', 2.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Velas Volcan Sparkler', 'pasteleria', 2.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1302,7 +1318,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-14')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Cajas Visor</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.49.jpeg" alt="Domo y Cajas Transparentes con Acetato Cristal" id="prod-img-14" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.49.jpeg" alt="Domo y Cajas Transparentes con Acetato Cristal" id="prod-img-14" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1314,8 +1330,7 @@
                 <span class="prod-price-val" data-editable="true" id="p14-price">$8.00</span>
                 <span class="prod-status-tag stock">Alta Resistencia</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Cajas Panoramicas con Acetato', 'cajas', 8.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Cajas Panoramicas con Acetato', 'cajas', 8.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1326,7 +1341,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-15')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Colorimetría</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.50.jpeg" alt="Colorantes en Gel Concentrado Pastelero" id="prod-img-15" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.55.50.jpeg" alt="Colorantes en Gel Concentrado Pastelero" id="prod-img-15" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1338,8 +1353,7 @@
                 <span class="prod-price-val" data-editable="true" id="p15-price">$3.00</span>
                 <span class="prod-status-tag stock">Frasco 30ml</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Colorantes en Gel Concentrado', 'pasteleria', 3.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Colorantes en Gel Concentrado', 'pasteleria', 3.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1350,7 +1364,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-16')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Herramientas</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.56.09.jpeg" alt="Mangas y Boquillas Rusas Repostería" id="prod-img-16" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.56.09.jpeg" alt="Mangas y Boquillas Rusas Repostería" id="prod-img-16" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1362,8 +1376,7 @@
                 <span class="prod-price-val" data-editable="true" id="p16-price">$6.00</span>
                 <span class="prod-status-tag stock">Kit Profesional</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Mangas y Boquillas Reposteria', 'pasteleria', 6.00)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Mangas y Boquillas Reposteria', 'pasteleria', 6.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1374,7 +1387,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-17')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Presentación</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.56.11%20(1).jpeg" alt="Capacillos y Pirotines de Lujo Antigrasa" id="prod-img-17" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.56.11 (1).jpeg" alt="Capacillos y Pirotines de Lujo Antigrasa" id="prod-img-17" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1386,8 +1399,7 @@
                 <span class="prod-price-val" data-editable="true" id="p17-price">$3.50</span>
                 <span class="prod-status-tag stock">Pack x50</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Capacillos Metalizados', 'pasteleria', 3.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Capacillos Metalizados', 'pasteleria', 3.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1398,7 +1410,7 @@
           <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-18')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Alisado Perfecto</span>
-            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.56.11.jpeg" alt="Espátulas y Scrapers para Alisado de Tortas" id="prod-img-18" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+            <img src="./WhatsApp Image 2026-10-05 at 11.56.11.jpeg" alt="Espátulas y Scrapers para Alisado de Tortas" id="prod-img-18" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
@@ -1410,8 +1422,7 @@
                 <span class="prod-price-val" data-editable="true" id="p18-price">$5.50</span>
                 <span class="prod-status-tag stock">Herramienta</span>
               </div>
-              <button class="prod-cta-btn" onclick="openQuickOrder('Espatulas y Scrapers Alisado', 'pasteleria', 5.50)">
-                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Espatulas y Scrapers Alisado', 'pasteleria', 5.50)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
               </button>
             </div>
           </div>
@@ -1826,6 +1837,44 @@ ${notes ? `📝 *Detalles:* ${notes}
     }
 
     // =========================================================================
+    
+    // Función directa para cambiar foto de una tarjeta (incluso si está rota o vacía)
+    window.triggerCardImageUpload = function(btnOrBox) {
+      if (!isEditMode) return;
+      const card = btnOrBox.closest('.prod-card');
+      const img = card ? card.querySelector('img') : null;
+      if (!img) return;
+
+      activeTargetImgForUpload = img;
+      const action = prompt(
+        "📷 CAMBIAR FOTO DEL PRODUCTO\n\n" +
+        "1: Seleccionar archivo desde tu dispositivo (Galería / Archivos).\n" +
+        "2: Escribir o pegar ruta / URL (Ej: ./WhatsApp Image... o https://...)\n\n" +
+        "Escribe 1 o 2:", "1"
+      );
+
+      if (action === "1") {
+        let fileInput = document.getElementById('global-img-file-picker');
+        if (!fileInput) {
+          fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.id = 'global-img-file-picker';
+          fileInput.accept = 'image/*';
+          fileInput.style.display = 'none';
+          document.body.appendChild(fileInput);
+          fileInput.addEventListener('change', handleDeviceImageSelected);
+        }
+        fileInput.click();
+      } else if (action === "2") {
+        const newUrl = prompt("Pega la ruta de la imagen o URL:", img.src);
+        if (newUrl && newUrl.trim()) {
+          img.src = newUrl.trim();
+          saveImagesToStorage();
+          alert("✅ Foto actualizada. Guarda los cambios con el botón inferior.");
+        }
+      }
+    };
+
     // EDICIÓN VISUAL DE IMÁGENES (AVATAR Y PRODUCTOS)
     // =========================================================================
     let activeTargetImgForUpload = null;
@@ -1926,7 +1975,7 @@ ${notes ? `📝 *Detalles:* ${notes}
       const price = prompt("Precio sugerido (Ej. $10.00):", "$10.00") || "$10.00";
       const cat = prompt("Categoría (topper / pasteleria / cajas / birretes / corporativo):", "pasteleria") || "pasteleria";
       const desc = prompt("Descripción breve del producto:", "Personalizado en taller Creaciones JJ") || "Personalizado en taller Creaciones JJ";
-      const imgPath = prompt("Ruta o nombre de la foto (o déjalo en blanco para cambiarlo después):", "./WhatsApp%20Image%202026-10-05%20at%2011.55.18.jpeg") || "./WhatsApp%20Image%202026-10-05%20at%2011.55.18.jpeg";
+      const imgPath = prompt("Ruta o nombre de la foto (o déjalo en blanco para cambiarlo después):", "./WhatsApp Image 2026-10-05 at 11.55.18.jpeg") || "./WhatsApp Image 2026-10-05 at 11.55.18.jpeg";
 
       const grid = document.getElementById('main-catalog-grid');
       const newId = 'card-custom-' + Date.now();
@@ -1951,8 +2000,7 @@ ${notes ? `📝 *Detalles:* ${notes}
               <span class="prod-price-val" data-editable="true" id="price-${newId}">${price}</span>
               <span class="prod-status-tag stock">Nuevo</span>
             </div>
-            <button class="prod-cta-btn" onclick="openQuickOrder('${title}', '${cat}', 10.00)">
-              <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+            <button class="prod-cta-btn" onclick="openQuickOrder('${title}', '${cat}', 10.00)"><i class="fa-brands fa-whatsapp"></i> <span data-editable="true">Pedir por WhatsApp</span>
             </button>
           </div>
         </div>
