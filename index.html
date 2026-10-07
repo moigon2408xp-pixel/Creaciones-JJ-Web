@@ -720,6 +720,94 @@
       .products-cards-grid { grid-template-columns: 1fr; }
       .editor-control-bar { width: 92%; justify-content: space-between; }
     }
+  
+    /* TIKTOK BRANDED STYLING & HOVER */
+    .bio-social-icon.tt {
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bio-social-icon.tt i {
+      color: inherit;
+    }
+    .bio-social-icon.tt:hover {
+      background: #010101 !important;
+      color: #ffffff !important;
+      border-color: #fe2c55 !important;
+      box-shadow: 0 8px 22px rgba(254, 44, 85, 0.5), 0 0 14px rgba(0, 242, 254, 0.45) !important;
+      transform: translateY(-4px) scale(1.12);
+    }
+
+    /* IMÁGENES EDITABLES EN MODO EDICIÓN */
+    .editor-mode-active img[data-editable-img="true"],
+    .editor-mode-active .prod-img-box img,
+    .editor-mode-active .bio-avatar-ring img {
+      cursor: pointer !important;
+      outline: 2px dashed #008559 !important;
+      outline-offset: 2px;
+      transition: all 0.2s ease;
+    }
+    .editor-mode-active img[data-editable-img="true"]:hover,
+    .editor-mode-active .prod-img-box img:hover,
+    .editor-mode-active .bio-avatar-ring img:hover {
+      outline: 3px solid #fe2c55 !important;
+      filter: brightness(0.85);
+    }
+
+    /* BOTÓN ELIMINAR PRODUCTO EN MODO EDICIÓN */
+    .prod-delete-btn {
+      display: none;
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+    .editor-mode-active .prod-delete-btn {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* COLAPSO Y EXPANSIÓN DEL CATÁLOGO */
+    .catalog-item-hidden {
+      display: none !important;
+    }
+    .catalog-expand-container {
+      text-align: center;
+      margin-top: 28px;
+      margin-bottom: 20px;
+    }
+    .catalog-expand-btn {
+      background: var(--surface);
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+      padding: 10px 24px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(0, 106, 70, 0.12);
+      transition: all 0.25s ease;
+    }
+    .catalog-expand-btn:hover {
+      background: var(--primary);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 106, 70, 0.25);
+    }
+
   </style>
 </head>
 <body>
@@ -742,6 +830,9 @@
       </label>
     </div>
 
+    <button type="button" class="editor-save-btn" onclick="openAddProductModal()" style="background:#0ea5e9; border:none;" title="Agregar nuevo producto al catálogo">
+      <i class="fa-solid fa-plus"></i> + Producto
+    </button>
     <button class="editor-save-btn" onclick="saveEditsToStorage()">
       <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
     </button>
@@ -751,9 +842,9 @@
   </div>
 
   <!-- Top Strip -->
-  <div class="top-strip">
+  <div class="top-strip" id="top-strip-banner" data-editable="true">
     <div class="top-strip-inner">
-      <span>✂️ Taller Creativo en San Francisco, Zulia • Envíos a toda Venezuela</span>
+      <span id="top-strip-text" data-editable="true">✂️ Taller Creativo en San Francisco, Zulia • Envíos a toda Venezuela</span>
       <div class="bcv-rate-pill">
         <i class="fa-solid fa-coins"></i> Tasa BCV: <strong id="bcv-val-display" data-editable="true">Consultar al ordenar</strong>
       </div>
@@ -895,144 +986,445 @@
       <div class="products-cards-grid" id="products-catalog-grid">
         
         <!-- Producto 1: Topper 15 Años Glitter Espejado -->
-        <div class="prod-card" data-cat="topper">
+        <div class="prod-card" data-cat="topper" id="card-prod-1">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-1')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Topper de Lujo</span>
-            <img src="./WhatsApp Image 2026-10-03 at 11.02.54.jpeg" alt="Topper 15 Años Glitter Acrílico Espejado" />
+            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.02.54.jpeg" alt="Topper 15 Años Glitter Acrílico Espejado" id="prod-img-1" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
-              <h3 class="prod-title" data-editable="true" id="p1-title">Topper 15 en Acrílico Espejado & Glitter</h3>
+              <h3 class="prod-title" data-editable="true" id="p1-title">Topper 15 en Acrílico Espejado &amp; Glitter</h3>
               <p class="prod-desc" data-editable="true" id="p1-desc">Número 15 en corte láser de acrílico espejado con relieve en cartulina glitter plateada holográfica y base transparente que flota sobre la torta.</p>
             </div>
             <div>
-              <div class="prod-price-strip">
-                <span class="price-usd" data-editable="true" id="p1-price">Desde $6.00</span>
-                <span class="price-bs">Personalizado al gusto</span>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p1-price">$12.00</span>
+                <span class="prod-status-tag stock">Personalizado</span>
               </div>
-              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Me%20interesa%20encargar%20un%20Topper%20de%2015%20Años%20en%20Acrílico%20Espejado" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
-                <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
-              </a>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Topper 15 Acrílico Espejado', 'topper', 12.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Producto 2: Caja Sorpresa Río Boarding Pass -->
-        <div class="prod-card" data-cat="caja">
+        <!-- Producto 2: Caja Sorpresa de Viaje & Boarding Pass -->
+        <div class="prod-card" data-cat="cajas" id="card-prod-2">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-2')">🗑️ Eliminar</button>
           <div class="prod-img-box">
-            <span class="prod-cat-badge secondary">Caja Sorpresa</span>
-            <img src="./WhatsApp Image 2026-10-03 at 11.02.54 (1).jpeg" alt="Caja Sorpresa Viaje Boarding Pass" />
+            <span class="prod-cat-badge">Caja Sorpresa</span>
+            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.02.54%20(1).jpeg" alt="Caja Maleta de Viaje con Boarding Pass personalizado" id="prod-img-2" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
               <h3 class="prod-title" data-editable="true" id="p2-title">Caja Temática de Viaje + Boarding Pass</h3>
-              <p class="prod-desc" data-editable="true" id="p2-desc">Caja lila 'Feliz Cumple Amor Mío' con cámara fotográfica 3D, avión en relieve, mapa mundi y Pase de Abordaje a Río de Janeiro para el agasajado.</p>
+              <p class="prod-desc" data-editable="true" id="p2-desc">Caja tipo maleta con textura vintage, visor shaker con lentejuelas y boleto de avión personalizado con los datos reales del viaje sorpresa.</p>
             </div>
             <div>
-              <div class="prod-price-strip">
-                <span class="price-usd" data-editable="true" id="p2-price">Desde $8.50</span>
-                <span class="price-bs">Incluye ticket de viaje</span>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p2-price">$16.00</span>
+                <span class="prod-status-tag stock">A Medida</span>
               </div>
-              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Deseo%20cotizar%20la%20Caja%20Sorpresa%20con%20Boarding%20Pass%20de%20viaje" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
-                <i class="fa-brands fa-whatsapp"></i> Cotizar Caja Viaje
-              </a>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Caja Maleta de Viaje Sorpresa', 'caja', 16.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Producto 3: Stray Kids K-Pop Cupcake Set -->
-        <div class="prod-card" data-cat="kpop">
+        <!-- Producto 3: Set Cupcakes K-Pop Stray Kids -->
+        <div class="prod-card" data-cat="topper" id="card-prod-3">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-3')">🗑️ Eliminar</button>
           <div class="prod-img-box">
-            <span class="prod-cat-badge dark">K-Pop Especial</span>
-            <img src="./WhatsApp Image 2026-10-03 at 11.03.01 (3).jpeg" alt="Set Stray Kids Cupcakes" />
+            <span class="prod-cat-badge">Mini Toppers</span>
+            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.03.01%20(3).jpeg" alt="Set de Toppers para Cupcakes Stray Kids" id="prod-img-3" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
-              <h3 class="prod-title" data-editable="true" id="p3-title">Set Cupcakes K-Pop Stray Kids</h3>
-              <p class="prod-desc" data-editable="true" id="p3-desc">Mini toppers troquelados de cada integrante con gorrito de fiesta metalizado, logo en relieve, cassette NOEASY, notas musicales y estrellas.</p>
+              <h3 class="prod-title" data-editable="true" id="p3-title">Set Cupcakes K-Pop Stray Kids (Pack 12)</h3>
+              <p class="prod-desc" data-editable="true" id="p3-desc">Pack de 12 mini toppers fotográficos con corte troquelado perfecto, marco en cartulina de espejo plateada y palillos acrílicos higiénicos.</p>
             </div>
             <div>
-              <div class="prod-price-strip">
-                <span class="price-usd" data-editable="true" id="p3-price">Pack Set: $5.50</span>
-                <span class="price-bs">Torta + 12 cupcakes</span>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p3-price">$8.50</span>
+                <span class="prod-status-tag stock">Pack x12</span>
               </div>
-              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Quiero%20el%20set%20de%20toppers%20K-Pop%20Stray%20Kids" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
-                <i class="fa-brands fa-whatsapp"></i> Pedir Set Stray Kids
-              </a>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Set Mini Toppers Stray Kids', 'topper', 8.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Producto 4: Birrete de Graduación No Easy -->
-        <div class="prod-card" data-cat="birrete">
+        <!-- Producto 4: Birrete de Grado Deluxe -->
+        <div class="prod-card" data-cat="birretes" id="card-prod-4">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-4')">🗑️ Eliminar</button>
           <div class="prod-img-box">
             <span class="prod-cat-badge">Graduación</span>
-            <img src="./WhatsApp Image 2026-10-03 at 11.03.01 (1).jpeg" alt="Birrete Graduación This Was So No Easy" />
+            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.03.01%20(1).jpeg" alt="Birrete de Grado Decorado 3D" id="prod-img-4" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
               <h3 class="prod-title" data-editable="true" id="p4-title">Birrete de Grado 'This Was So No Easy'</h3>
-              <p class="prod-desc" data-editable="true" id="p4-desc">Birrete azul eléctrico con rotulado en vinil de alta fijación, relámpagos estilo neón y siluetas de graduandos. Personalizable con cualquier frase o logo.</p>
+              <p class="prod-desc" data-editable="true" id="p4-desc">Birrete forrado en terciopelo negro con letras 3D en oro metalizado, borde trenzado a mano y apliques florales con pedrería brillante.</p>
             </div>
             <div>
-              <div class="prod-price-strip">
-                <span class="price-usd" data-editable="true" id="p4-price">Desde $7.00</span>
-                <span class="price-bs">Listo para tu caravana</span>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p4-price">$22.00</span>
+                <span class="prod-status-tag stock">Exclusivo</span>
               </div>
-              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Me%20interesa%20encargar%20un%20Birrete%20de%20Graduación%20personalizado" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
-                <i class="fa-brands fa-whatsapp"></i> Cotizar Birrete
-              </a>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Birrete Grado Decorado', 'birrete', 22.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Producto 5: Insumos de Repostería y Chantilly -->
-        <div class="prod-card" data-cat="reposteria">
+        <!-- Producto 5: Chantilly L'Antique & Polvos de Hadas -->
+        <div class="prod-card" data-cat="pasteleria" id="card-prod-5">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-5')">🗑️ Eliminar</button>
           <div class="prod-img-box">
-            <span class="prod-cat-badge secondary">Insumos Taller</span>
-            <img src="./WhatsApp Image 2026-10-05 at 11.55.18.jpeg" alt="Insumos Repostería Chantilly & Leches" />
+            <span class="prod-cat-badge">Insumos Pastelería</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.18.jpeg" alt="Crema Chantilly L'Antique e Insumos Dulces" id="prod-img-5" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
-              <h3 class="prod-title" data-editable="true" id="p5-title">Chantilly L'Antique & Esferas Dulces</h3>
-              <p class="prod-desc" data-editable="true" id="p5-desc">Crema para batir profesional Chantilly L'Antique de 1 Litro, leche condensada y esferas decorativas perladas para tus pasteles.</p>
+              <h3 class="prod-title" data-editable="true" id="p5-title">Chantilly L'Antique &amp; Esferas Dulces</h3>
+              <p class="prod-desc" data-editable="true" id="p5-desc">Crema vegetal premium para montaje de tortas con estabilidad garantizada y set de esferas doradas y acrílicas para decoración pastelera.</p>
             </div>
             <div>
-              <div class="prod-price-strip">
-                <span class="price-usd" data-editable="true" id="p5-price">Precios Mostrador</span>
-                <span class="price-bs">Disponibilidad inmediata</span>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p5-price">$6.50</span>
+                <span class="prod-status-tag stock">Disponible</span>
               </div>
-              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Quiero%20consultar%20precio%20de%20Chantilly%20y%20artículos%20de%20repostería" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
-                <i class="fa-brands fa-whatsapp"></i> Consultar Insumos
-              </a>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Chantilly L Antique e Insumos', 'pasteleria', 6.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Producto 6: Identidad de Marca y Cartelería 3D -->
-        <div class="prod-card" data-cat="topper">
+        <!-- Producto 6: Placas y Logos en Acrílico Espejado -->
+        <div class="prod-card" data-cat="corporativo" id="card-prod-6">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-6')">🗑️ Eliminar</button>
           <div class="prod-img-box">
-            <span class="prod-cat-badge">Acrílico 3D</span>
-            <img src="./WhatsApp Image 2026-10-03 at 11.03.02 (2).jpeg" alt="Logo Creaciones JJ 3D" />
+            <span class="prod-cat-badge">Corporativo</span>
+            <img src="./WhatsApp%20Image%202026-10-03%20at%2011.03.02%20(2).jpeg" alt="Placas y Logos en Acrílico Espejado" id="prod-img-6" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
           </div>
           <div class="prod-body">
             <div>
               <h3 class="prod-title" data-editable="true" id="p6-title">Logos y Placas Corporativas en Acrílico</h3>
-              <p class="prod-desc" data-editable="true" id="p6-desc">Logos corporativos y familiares en acrílico multicapa con base brillante para mostradores, sesiones de fotos o entradas de negocio.</p>
+              <p class="prod-desc" data-editable="true" id="p6-desc">Acrílico oro, plata y rose gold cortado en láser de precisión milimétrica para marcas comerciales, pastelerías y estudios de belleza.</p>
             </div>
             <div>
-              <div class="prod-price-strip">
-                <span class="price-usd" data-editable="true" id="p6-price">A Medida</span>
-                <span class="price-bs">Presupuesto según tamaño</span>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p6-price">$18.00</span>
+                <span class="prod-status-tag stock">A Medida</span>
               </div>
-              <a href="https://wa.me/584141646511?text=Hola%20Creaciones%20JJ!%20Deseo%20cotizar%20un%20Logo%20o%20Placa%20en%20Acrílico%203D" target="_blank" class="btn-order-wa-prod" style="margin-top: 10px;">
-                <i class="fa-brands fa-whatsapp"></i> Cotizar Acrílico 3D
-              </a>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Logo en Acrílico Espejado', 'corporativo', 18.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 7: Polvos de Hadas & Glitter Comestible (OCULTO INICIALMENTE) -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-7">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-7')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Brillos y Acabados</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.19%20(1).jpeg" alt="Polvos de Hadas y Glitter Comestible Repostería" id="prod-img-7" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p7-title">Polvo de Hadas &amp; Glitter Comestible</h3>
+              <p class="prod-desc" data-editable="true" id="p7-desc">Atomizador con brillo holográfico comestible para darle acabado perlado de alto impacto a toppers, fondant, merengues y pasteles.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p7-price">$4.50</span>
+                <span class="prod-status-tag stock">En Stock</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Polvo de Hadas Comestible', 'pasteleria', 4.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 8: Cortadores y Moldes Fondant -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-8">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-8')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Moldes y Cortes</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.19.jpeg" alt="Cortadores y Moldes para Fondant" id="prod-img-8" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p8-title">Cortadores Temáticos &amp; Moldes Fondant</h3>
+              <p class="prod-desc" data-editable="true" id="p8-desc">Set de cortadores plásticos de alta definición para figuras de azúcar, galletas decoradas y detalles finos de repostería creativa.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p8-price">$5.00</span>
+                <span class="prod-status-tag stock">Variedad</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Cortadores y Moldes Fondant', 'pasteleria', 5.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 9: Sprinkles & Perlas Dulces -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-9">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-9')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Decoración Dulce</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.20.jpeg" alt="Sprinkles, Perlas Dulces y Grajeas Metalizadas" id="prod-img-9" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p9-title">Sprinkles &amp; Perlas Metalizadas</h3>
+              <p class="prod-desc" data-editable="true" id="p9-desc">Mix de grajeas premium en tonos oro, plata, pastel y rosas con perlas crujientes para rematar la corona y bordes de la torta.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p9-price">$3.50</span>
+                <span class="prod-status-tag stock">Mix 100g</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Sprinkles y Perlas Metalizadas', 'pasteleria', 3.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 10: Esferas Acrílicas & Globos Cake Topper -->
+        <div class="prod-card catalog-item-hidden" data-cat="topper" id="card-prod-10">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-10')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Cake Topper 3D</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.21.jpeg" alt="Esferas Acrílicas y Globos Cake Topper 3D" id="prod-img-10" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p10-title">Esferas Acrílicas &amp; Burbujas 3D</h3>
+              <p class="prod-desc" data-editable="true" id="p10-desc">Set de esferas espejadas en cascada para crear volumen y dimensión moderna en tortas de tendencia estética y minimalista.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p10-price">$7.00</span>
+                <span class="prod-status-tag stock">Set x5</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Esferas Acrilicas para Torta', 'topper', 7.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 11: Bases para Tortas MDF Reforzadas -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-11">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-11')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Soportes</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.25.jpeg" alt="Bases para Tortas y Discos MDF Reforzados" id="prod-img-11" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p11-title">Bases y Discos de Torta MDF Reforzados</h3>
+              <p class="prod-desc" data-editable="true" id="p11-desc">Cake boards circulares y cuadrados en MDF de 3mm a 6mm forrados en polipropileno impermeable blanco y plata para transporte seguro.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p11-price">$4.00</span>
+                <span class="prod-status-tag stock">Varios Tamaños</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Bases de Torta MDF', 'pasteleria', 4.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 12: Cintas y Lazos de Lujo -->
+        <div class="prod-card catalog-item-hidden" data-cat="cajas" id="card-prod-12">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-12')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Packaging</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.27.jpeg" alt="Cintas y Lazos para Packaging Dulce" id="prod-img-12" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p12-title">Cintas de Raso &amp; Lazos de Lujo</h3>
+              <p class="prod-desc" data-editable="true" id="p12-desc">Rollos de cinta satén y grosgrain en anchos de 15mm a 40mm para lazos de cajas de regalo, domos pasteleros y arreglos.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p12-price">$3.00</span>
+                <span class="prod-status-tag stock">Rollo 20m</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Cintas de Raso y Lazos', 'cajas', 3.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 13: Velas Sparkler y Bengalas -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-13">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-13')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Celebración</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.49%20(1).jpeg" alt="Velas Sparkler y Bengalas de Cumpleaños" id="prod-img-13" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p13-title">Velas Volcán Sparkler &amp; Bengalas</h3>
+              <p class="prod-desc" data-editable="true" id="p13-desc">Bengalas frías sin humo negro para encendido seguro sobre la torta al momento de cantar el cumpleaños feliz.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p13-price">$2.50</span>
+                <span class="prod-status-tag stock">Pack x2</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Velas Volcan Sparkler', 'pasteleria', 2.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 14: Cajas Transparentes con Acetato Cristal -->
+        <div class="prod-card catalog-item-hidden" data-cat="cajas" id="card-prod-14">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-14')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Cajas Visor</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.49.jpeg" alt="Domo y Cajas Transparentes con Acetato Cristal" id="prod-img-14" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p14-title">Cajas Panorámicas con Acetato Cristal</h3>
+              <p class="prod-desc" data-editable="true" id="p14-desc">Cajas altas transparentes de 20cm a 35cm para que el topper y la decoración de la torta se luzcan en 360 grados.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p14-price">$8.00</span>
+                <span class="prod-status-tag stock">Alta Resistencia</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Cajas Panoramicas con Acetato', 'cajas', 8.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 15: Colorantes en Gel Pastelero -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-15">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-15')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Colorimetría</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.55.50.jpeg" alt="Colorantes en Gel Concentrado Pastelero" id="prod-img-15" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p15-title">Colorantes en Gel Concentrado</h3>
+              <p class="prod-desc" data-editable="true" id="p15-desc">Pigmentos hidrosolubles y liposolubles de alta concentración que logran tonos intensos sin amargar la crema o alterar el merengue.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p15-price">$3.00</span>
+                <span class="prod-status-tag stock">Frasco 30ml</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Colorantes en Gel Concentrado', 'pasteleria', 3.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 16: Mangas y Boquillas Rusas -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-16">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-16')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Herramientas</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.56.09.jpeg" alt="Mangas y Boquillas Rusas Repostería" id="prod-img-16" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p16-title">Mangas Desechables &amp; Boquillas Rusas</h3>
+              <p class="prod-desc" data-editable="true" id="p16-desc">Mangas antideslizantes de 16 pulgadas y boquillas de acero inoxidable 304 para rosas y tulipanes en un solo movimiento.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p16-price">$6.00</span>
+                <span class="prod-status-tag stock">Kit Profesional</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Mangas y Boquillas Reposteria', 'pasteleria', 6.00)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 17: Capacillos y Pirotines de Lujo -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-17">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-17')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Presentación</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.56.11%20(1).jpeg" alt="Capacillos y Pirotines de Lujo Antigrasa" id="prod-img-17" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p17-title">Capacillos Metalizados Antigrasa</h3>
+              <p class="prod-desc" data-editable="true" id="p17-desc">Pirotines N° 8 y N° 10 en papel metalizado dorado y oro rosa que mantienen su brillo intacto después del horneado.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p17-price">$3.50</span>
+                <span class="prod-status-tag stock">Pack x50</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Capacillos Metalizados', 'pasteleria', 3.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Producto 18: Espátulas y Scrapers para Alisado -->
+        <div class="prod-card catalog-item-hidden" data-cat="pasteleria" id="card-prod-18">
+          <button type="button" class="prod-delete-btn" onclick="deleteProductCard('card-prod-18')">🗑️ Eliminar</button>
+          <div class="prod-img-box">
+            <span class="prod-cat-badge">Alisado Perfecto</span>
+            <img src="./WhatsApp%20Image%202026-10-05%20at%2011.56.11.jpeg" alt="Espátulas y Scrapers para Alisado de Tortas" id="prod-img-18" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+          </div>
+          <div class="prod-body">
+            <div>
+              <h3 class="prod-title" data-editable="true" id="p18-title">Espátulas Angulares &amp; Scrapers Acero</h3>
+              <p class="prod-desc" data-editable="true" id="p18-desc">Alisadores acrílicos y de acero inoxidable con graduación métrica para bordes perfectos y rectos en buttercream y ganache.</p>
+            </div>
+            <div>
+              <div class="prod-price-row">
+                <span class="prod-price-val" data-editable="true" id="p18-price">$5.50</span>
+                <span class="prod-status-tag stock">Herramienta</span>
+              </div>
+              <button class="prod-cta-btn" onclick="openQuickOrder('Espatulas y Scrapers Alisado', 'pasteleria', 5.50)">
+                <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+              </button>
             </div>
           </div>
         </div>
 
       </div>
+
+      <!-- BOTÓN EXPANDIR / COLAPSAR CATÁLOGO -->
+      <div class="catalog-expand-container">
+        <button type="button" id="btn-toggle-catalog" class="catalog-expand-btn" onclick="toggleCatalogExpand()">
+          <i class="fa-solid fa-layer-group"></i> <span id="catalog-expand-text">👁️ Ver más productos (+12)</span>
+        </button>
+      </div></div>
     </section>
 
     <!-- ========================================================================
@@ -1157,7 +1549,9 @@
 
     // Inicialización y Carga de Ediciones
     window.addEventListener('DOMContentLoaded', () => {
+      loadCustomProductsFromStorage();
       loadEditsFromStorage();
+      loadImagesFromStorage();
     });
 
     
@@ -1249,6 +1643,7 @@
         return;
       }
       currentActiveEditableEl.style.color = color;
+      currentActiveEditableEl.querySelectorAll('i, svg').forEach(ic => ic.style.color = color);
     };
 
     window.applySelectedBgColor = function(color) {
@@ -1284,7 +1679,10 @@
             const el = document.getElementById(id);
             if (el) {
               if (edits[id].html !== undefined) el.innerHTML = edits[id].html;
-              if (edits[id].color) el.style.color = edits[id].color;
+              if (edits[id].color) {
+                el.style.color = edits[id].color;
+                el.querySelectorAll('i, svg').forEach(ic => ic.style.color = edits[id].color);
+              }
               if (edits[id].background) {
                 el.style.background = edits[id].background;
                 el.style.backgroundColor = edits[id].background;
@@ -1400,6 +1798,186 @@ ${notes ? `📝 *Detalles:* ${notes}
         btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Registrar Pedido en Taller & Enviar a WhatsApp</span>`;
       }, 1000);
     }
+  
+    // =========================================================================
+    // CONTROL EXPANDIR / COLAPSAR CATÁLOGO (ESPACIO VERTICAL EN MÓVIL)
+    // =========================================================================
+    let isCatalogExpanded = false;
+    function toggleCatalogExpand() {
+      isCatalogExpanded = !isCatalogExpanded;
+      const hiddenCards = document.querySelectorAll('.prod-card.catalog-item-hidden, .prod-card.catalog-item-revealed');
+      const btnText = document.getElementById('catalog-expand-text');
+      
+      hiddenCards.forEach(card => {
+        if (isCatalogExpanded) {
+          card.classList.remove('catalog-item-hidden');
+          card.classList.add('catalog-item-revealed');
+          card.style.display = 'flex';
+        } else {
+          card.classList.add('catalog-item-hidden');
+          card.classList.remove('catalog-item-revealed');
+          card.style.display = 'none';
+        }
+      });
+
+      if (btnText) {
+        btnText.innerHTML = isCatalogExpanded ? '🔼 Colapsar catálogo' : '👁️ Ver más productos (+12)';
+      }
+    }
+
+    // =========================================================================
+    // EDICIÓN VISUAL DE IMÁGENES (AVATAR Y PRODUCTOS)
+    // =========================================================================
+    let activeTargetImgForUpload = null;
+
+    document.addEventListener("click", (e) => {
+      if (!isEditMode) return;
+      const img = e.target.closest('img[data-editable-img="true"], .bio-avatar-ring img, .prod-img-box img');
+      if (img) {
+        e.preventDefault();
+        e.stopPropagation();
+        activeTargetImgForUpload = img;
+        
+        const action = prompt(
+          "📷 CAMBIAR IMAGEN\n\n" +
+          "1: Subir una imagen desde tu teléfono o computadora.\n" +
+          "2: Pegar una ruta o URL de imagen (Ej: ./WhatsApp Image... o https://...)\n\n" +
+          "Escribe 1 o 2:"
+        );
+
+        if (action === "1") {
+          let fileInput = document.getElementById('global-img-file-picker');
+          if (!fileInput) {
+            fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.id = 'global-img-file-picker';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+            fileInput.addEventListener('change', handleDeviceImageSelected);
+          }
+          fileInput.click();
+        } else if (action === "2") {
+          const newUrl = prompt("Pega la URL o ruta relativa de la nueva imagen:", img.src);
+          if (newUrl && newUrl.trim()) {
+            img.src = newUrl.trim();
+            saveImagesToStorage();
+            alert("✅ Imagen actualizada. Recuerda hacer clic en 'Guardar Cambios'.");
+          }
+        }
+      }
+    });
+
+    function handleDeviceImageSelected(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file && activeTargetImgForUpload) {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          activeTargetImgForUpload.src = ev.target.result;
+          saveImagesToStorage();
+          alert("✅ Foto subida exitosamente desde el dispositivo.");
+        };
+        reader.readAsDataURL(file);
+      }
+      e.target.value = "";
+    }
+
+    function saveImagesToStorage() {
+      const imagesMap = {};
+      document.querySelectorAll('img[data-editable-img="true"], .prod-img-box img, .bio-avatar-ring img').forEach((img, idx) => {
+        const id = img.id || ('img-saved-' + idx);
+        img.id = id;
+        imagesMap[id] = img.src;
+      });
+      localStorage.setItem('creaciones_jj_landing_images', JSON.stringify(imagesMap));
+    }
+
+    function loadImagesFromStorage() {
+      const saved = localStorage.getItem('creaciones_jj_landing_images');
+      if (saved) {
+        try {
+          const imagesMap = JSON.parse(saved);
+          for (let id in imagesMap) {
+            const img = document.getElementById(id);
+            if (img) img.src = imagesMap[id];
+          }
+        } catch(e) {}
+      }
+    }
+
+    // =========================================================================
+    // AGREGAR Y ELIMINAR PRODUCTOS DEL CATÁLOGO
+    // =========================================================================
+    window.deleteProductCard = function(cardId) {
+      if (!isEditMode) return;
+      if (confirm("¿Estás seguro de que deseas eliminar este producto del catálogo?")) {
+        const card = document.getElementById(cardId);
+        if (card) {
+          card.remove();
+          saveCustomProductsToStorage();
+          alert("🗑️ Producto eliminado.");
+        }
+      }
+    };
+
+    window.openAddProductModal = function() {
+      const title = prompt("Título del nuevo producto:");
+      if (!title) return;
+      const price = prompt("Precio sugerido (Ej. $10.00):", "$10.00") || "$10.00";
+      const cat = prompt("Categoría (topper / pasteleria / cajas / birretes / corporativo):", "pasteleria") || "pasteleria";
+      const desc = prompt("Descripción breve del producto:", "Personalizado en taller Creaciones JJ") || "Personalizado en taller Creaciones JJ";
+      const imgPath = prompt("Ruta o nombre de la foto (o déjalo en blanco para cambiarlo después):", "./WhatsApp%20Image%202026-10-05%20at%2011.55.18.jpeg") || "./WhatsApp%20Image%202026-10-05%20at%2011.55.18.jpeg";
+
+      const grid = document.getElementById('main-catalog-grid');
+      const newId = 'card-custom-' + Date.now();
+      const newCard = document.createElement('div');
+      newCard.className = 'prod-card';
+      newCard.setAttribute('data-cat', cat);
+      newCard.id = newId;
+
+      newCard.innerHTML = `
+        <button type="button" class="prod-delete-btn" onclick="deleteProductCard('${newId}')">🗑️ Eliminar</button>
+        <div class="prod-img-box">
+          <span class="prod-cat-badge">${cat.toUpperCase()}</span>
+          <img src="${imgPath}" alt="${title}" id="img-${newId}" data-editable-img="true" title="Clic en Modo Edición para cambiar foto" />
+        </div>
+        <div class="prod-body">
+          <div>
+            <h3 class="prod-title" data-editable="true" id="title-${newId}">${title}</h3>
+            <p class="prod-desc" data-editable="true" id="desc-${newId}">${desc}</p>
+          </div>
+          <div>
+            <div class="prod-price-row">
+              <span class="prod-price-val" data-editable="true" id="price-${newId}">${price}</span>
+              <span class="prod-status-tag stock">Nuevo</span>
+            </div>
+            <button class="prod-cta-btn" onclick="openQuickOrder('${title}', '${cat}', 10.00)">
+              <i class="fa-brands fa-whatsapp"></i> <span>Pedir por WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      grid.prepend(newCard);
+      saveCustomProductsToStorage();
+      alert("✅ ¡Nuevo producto agregado al catálogo! Recuerda presionar 'Guardar Cambios'.");
+    };
+
+    function saveCustomProductsToStorage() {
+      const grid = document.getElementById('main-catalog-grid');
+      if (grid) {
+        localStorage.setItem('creaciones_jj_catalog_custom_v3', grid.innerHTML);
+      }
+    }
+
+    function loadCustomProductsFromStorage() {
+      const saved = localStorage.getItem('creaciones_jj_catalog_custom_v3');
+      if (saved) {
+        const grid = document.getElementById('main-catalog-grid');
+        if (grid) grid.innerHTML = saved;
+      }
+    }
+
   </script>
 </body>
 </html>
